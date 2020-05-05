@@ -1,5 +1,6 @@
 function doConfigurableScriptActions(){
 try{
+	logDebug("Vote for Pedro!");
 	var module = false;
 	if(appTypeArray && appTypeArray[0] != undefined){
 		module = appTypeArray[0];
