@@ -1,0 +1,131 @@
+{
+  "EnvHealth/Rec Health/Pool/Permit": {
+    "WorkflowTaskUpdateBefore": [
+      {
+        "metadata": {
+          "description": "Validation data on child record."
+        },
+        "preScript": "",
+        "criteria": {
+          "recordLevel": "child",
+          "recordType": [
+            "EnvHealth/Rec Health/Pool/Application" ,
+			"EnvHealth/Rec Health/Spa/Application"
+          ],
+          "wfTask": [
+            "Permit Status"
+          ],
+          "wfStatus": [
+            "Active"
+          ],
+          "recordCustomFields": 
+					 {
+        	     "Number of Employees": "12" ,
+                 "Non Profit" : true   
+					  }
+                               ,
+          "recordCustomLists": [
+                          {
+                            "tableName": "DAYS AND HOURS OF OPERATIONS",
+                            "columnName": "Days",
+                            "value": "day1"
+                          },
+                          {
+                              "tableName": "DAYS AND HOURS OF OPERATIONS",
+                              "columnName": "Hours",
+                              "value": "8"
+                            }
+                          
+                        ],
+          "recordAddress": {
+        	  "state" : "Jordan",
+        	  "primaryFlag" : "Y"
+        	  
+            },
+            "recordParcel":
+            	{
+            	"ParcelNumber": "number", 
+            	"Block": "block1"
+            	},
+           "requiredContact" : [ "Individual"] ,
+           "numberContacts": 4 ,
+           "allowBalance": false,
+           "relatedrecordStatus" : ["Denied" , "Additional Info Needed "] , 
+           "inspectionRequired":["Follow-up Inspection"], 
+           "requiredLP" : ["Business"] ,
+           "validateLP": true ,
+           "numberLP": "3" ,
+           "taskRequired" : ["Permit Issuance"] ,
+           "recordWorkflowStatus": [ 
+                             {"task" :  "Permit Issuance"} , 
+                             {"status" :  "Issued" }
+                             ]
+          
+         
+        },
+        "action": {
+         "recordCustomFieldsMessage": "Please check custom fields 'Number of Employees & Non Profit' for record IDs: ",
+         "recordCustomListsMessage": "Please check custom lists 'Days & Hours' for record IDs: " ,
+         "recordAddressMessage": "Please check 'Primary addres,State' for record IDs: ",
+         "recordParcelMessage": "please check parcel fields 'Parcel #,Block' for record IDs : ",
+         "requiredContactMessage": "These contacts types 'Individual' are required for record IDs: ",
+         "numberContactsMessage": "Number of contacts must be 4 contacts for each record IDs: ",
+         "allowBalanceMessage": "All invoiced fees must fully paid for record IDs:" ,
+         "relatedRecordStatusMessage" : "The records status should be one of 'Denied, Additional Info Needed' for record IDs:"  ,
+         "inspectionRequiredMessage" : "These inspections 'Follow-up Inspection' are required and should be completed for record IDs:", 
+         "requiredLPMessage": "These LPs are requird 'Business' for each record IDs: ",
+         "validateLPMessage": "These LPs are expired 'Business, Others' for record IDs: ",
+         "numberLPMessage": "Number of LPs must be 3 for each of record IDs: ", 
+         "taskRequiredMessage": "These tasks must be completed 'Permit Issuance' for record IDs: " ,
+         "recordWorkflowStatusMessage": "The workflow Task 'Permit Issuance' and workflow status 'Issued' are required for record IDs: "
+        },
+        "postScript": ""
+      }
+    ]
+  },
+  "EnvHealth/Rec Health/Pool/Application": {
+    "WorkflowTaskUpdateBefore": [
+      {
+        "metadata": {
+          "description": "Validation data on parent record ."
+        },
+        "preScript": "",
+        "criteria": {
+          "recordLevel": "parent",
+          "recordType": [
+            "EnvHealth/Rec Health/*/Permit"
+          ],
+          "wfTask": [
+            "Application Intake"
+          ],
+          "wfStatus": [
+            "Accepted"
+          ],
+          "recordCustomFields": {
+              "Number of Employees": "12" ,
+              "Non Profit" : true 
+            }
+           
+        },
+        "action": {
+        	 "recordCustomFieldsMessage": "Please check custom fields 'Number of Employees & Non Profit' for record IDs: ",
+             "recordCustomListsMessage": "Please check custom lists 'Days & Hours' for record IDs: " ,
+             "recordAddressMessage": "Please check 'Primary addres,State' for record IDs: ",
+             "recordParcelMessage": "please check parcel fields 'Parcel #,Block' for record IDs : ",
+             "requiredContactMessage": "These contacts types 'Individual' are required for record IDs: ",
+             "numberContactsMessage": "Number of contacts must be 4 contacts for each record IDs: ",
+             "allowBalanceMessage": "All invoiced fees must fully paid for record IDs:" ,
+             "relatedRecordStatusMessage" : "The records status should be one of 'Denied, Additional Info Needed' for record IDs:"  ,
+             "inspectionRequiredMessage" : "These inspections 'Follow-up Inspection' are required and should be completed for record IDs:", 
+             "requiredLPMessage": "These LPs are requird 'Business' for each record IDs: ",
+             "validateLPMessage": "These LPs are expired 'Business, Others' for record IDs: ",
+             "numberLPMessage": "Number of LPs must be 3 for each of record IDs: ", 
+             "taskRequiredMessage": "these tasks must be completed 'Permit Issuance' for record IDs: " ,
+             "recordWorkflowStatusMessage": "The workflow Task 'Permit Issuance' and workflow status 'Issued' are required for record IDs: "
+
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

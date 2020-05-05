@@ -1,0 +1,78 @@
+{
+  "Building/Commercial/Alteration/NA": {
+    "ApplicationSpecificInfoUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Validate LP with DPOR interface, update local LPs and add condition(s) if required",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          
+        },
+        "preScript": "",
+        "action": {
+          "enforceRank": true,
+          "enforceSpecialty": true,
+          "enforceStatus": false,
+          "enforceExpiry": false,
+		  "useValueForRankMap": true,
+          "conditionTypeRankViolation": "Building Permit",
+          "conditionNameRankViolation": "Site Technician Review Required",
+          "conditionTypeSpecialtyViolation": "Building Permit",
+          "conditionNameSpecialtyViolation": "Site Technician Review Required",
+          "conditionTypeStatusViolation": "",
+          "conditionNameStatusViolation": "",
+          "conditionTypeExpiryViolation": "",
+          "conditionNameExpiryViolation": "",
+          "rejectLpWithStatuses": [
+            "Withdrawn",
+            "Expired",
+            "Exp/Reinstate",
+            "License Expired"
+          ],
+          "rejectLpExpiresWithinDays": 20,
+          "specialtyValidationScope": "Record Type",
+          "specialtyValidationRecordTypes": {
+            "Building/Commercial/Alteration/NA": [
+              "ELE",
+              "MELE"
+            ],
+            "Building/Electrical/Commercial/NA": [
+              "ELE"
+            ]
+          },
+          "specialtyValidationCustomFields": {
+            "fieldName": "Type of Work",
+            "Water Heater": [
+              "ELE",
+              "MELE"
+            ],
+            "Water Pump": [
+              "ELE"
+            ]
+          },
+          "specialtyValidationCustomList": {
+            "tableName": "tab_123",
+            "columnName": "col_123",
+            "Water Heater": [
+              "ELE",
+              "MELE"
+            ],
+            "Water Pump": [
+              "ELE"
+            ]
+          },
+          "jobValueSource": "highest",
+          "lpUpdateRefFromCap": true,
+          "lpUpdateRefFromCapRecordStatus": [
+            "Submitted"
+          ],
+          "lpUpdateCapFromRef": true
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

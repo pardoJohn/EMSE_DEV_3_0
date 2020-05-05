@@ -1,0 +1,41 @@
+{
+  "Building/Commercial/Company/amman05": {
+    "Pageflow": [
+      {
+        "preScript": "",
+        "metadata": {
+          "description": "To validate an owner on a record",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "duplicateRecordType": [
+            {
+              "type": "Marijuana/Combo/Testing Facility/License",
+              "status": "Approved"
+            }
+          ],
+          "requiredRecordType": [
+            {
+              "type": "Marijuana/Combo/Testing Facility/License",
+              "status": "Approved"
+            }
+          ],
+          "cancelSubmissionFields": [
+            {
+              "OwnerFullName": "Saba Fakhry"
+            },
+            {
+              "MailZip": "12345"
+            }
+          ]
+        },
+        "action": {
+          
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

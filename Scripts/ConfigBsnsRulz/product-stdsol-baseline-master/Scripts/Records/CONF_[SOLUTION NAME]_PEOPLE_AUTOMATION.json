@@ -1,0 +1,39 @@
+{
+  "Marijuana/Combo/Testing Facility/LicenseXXX": {
+    "ApplicationSpecificInfoUpdateAfter": [
+      {
+        "metadata": {
+          "description": "To automate creation of reference contacts and reference licenses based on certain criteria",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "contactFields": {
+            "contactType": "Individual"
+          }
+        },
+        "preScript": "",
+        "action": {
+          "contactTypes": [
+            "Individual"
+          ],
+          "createReferenceContacts": true,
+          "updateReferenceContacts": true,
+          "compareFunction": "",
+          "licensedProfessionalType": "Contractor",
+          "createReferenceLicense": true,
+          "updatedReferenceLicense": true,
+          "createReferenceLicenseFromContactTypes": [
+            "Individual"
+          ],
+          "createPublicUser": true,
+          "linkPublicUserReferenceContact": true,
+          "linkPublicUserReferenceLicense": true,
+          "addAKANamesFromContactTemplateTable": "AKA_NAME_TABLE"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

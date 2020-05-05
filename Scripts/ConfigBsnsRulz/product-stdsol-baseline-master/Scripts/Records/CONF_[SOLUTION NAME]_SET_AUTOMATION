@@ -1,0 +1,29 @@
+ {
+  "ServiceRequest/Streets and Sidewalks/Streets/NA": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "preScript": "",
+        "metadata": {
+          "description": "add the record and it's related records to a Set",
+          "operators": {}
+        },
+        "criteria": {
+          "task": "Intake",
+          "status": ["Note"],
+          "allowBalance": true
+        },
+        "action": {
+          "setIDPrefix": "recordId",
+          "setNamePrefix": "recordName",
+          "includeDate": true,
+          "typeOfSet": "Invoice",
+          "statusOfSet": "Open",
+          "typeOfChild": "ServiceRequest/Streets and Sidewalks/Streets/NA",
+          "statusOfChild": "",
+          "includeParent": true
+        },
+        "postScript ": ""
+      }
+    ]
+  }
+}

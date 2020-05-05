@@ -1,0 +1,1 @@
+Put custom pages in this folder. Create a separate folder for each custom page.

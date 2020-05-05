@@ -1,0 +1,51 @@
+{
+  "Building/Commercial/Company/amman05": {
+    "ApplicationSubmitAfter": [
+      {
+        "preScript": "",
+        "metadata": {
+          "description": "To skip ACA page based on some rules",
+          "operators": {
+
+          }
+        },
+        "criteria": {
+          "contactFields": {
+            "contactType": "Applicant",
+            "firstName": "yazan"
+          },
+          "customFields ": {
+            "Street Name": "abc"
+          },
+          "customLists ": [
+            {
+              "tableName": "PARTNERS",
+              "columnName": "First Name",
+              "value": "partner 1"
+            }
+          ],
+          "addressFields": {
+            "streetName": "streetX"
+          },
+          "parcelFields": {
+            "Block": "112233",
+            "ParcelNumber": "254"
+          },
+          " lpFields": {
+            "licType": "Architect"
+          },
+          "recordStatus": [
+            "Waiting For Revisions"
+          ]
+        },
+        "action": {
+          "alertName": "VIP Parcel",
+          "alertAssign": "Workflow",
+          "alertDepartment": "Building Admin",
+          "alertUser": "Admin"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

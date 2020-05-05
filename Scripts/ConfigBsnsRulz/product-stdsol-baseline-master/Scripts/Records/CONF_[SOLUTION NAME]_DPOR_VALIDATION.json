@@ -1,0 +1,49 @@
+{
+  "Building/Commercial/Alteration/NA": {
+    "Pageflow": [
+      {
+        "metadata": {
+          "description": "Validate LP with DPOR interface (Before)",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+        },
+        "preScript": "",
+        "action": {
+          "validateRank": true,
+          "validateSpecialties": true,
+          "rejectLpWithStatuses": [
+            "Withdrawn",
+            "Expired"
+          ],
+          "rejectLpExpiresWithinDays": 20,
+          "specialtyValidationScope": "Custom List",
+          "specialtyValidationRecordTypes": {
+            "Building/*/Alteration/NA": [
+              "CBC",
+              "ELE"
+            ],
+            "Building/Electrical/Commercial/NA": [
+              "ELE"
+            ]
+          },
+          "specialtyValidationCustomFields":{
+  			"fieldName":"Type of Work",
+			"Metal Stud Only":["CBC","MELE"],
+			"Live/Work Unit":["RBC","ELE"]
+          },
+		  "specialtyValidationCustomList":{
+				"tableName":"table-123",
+				"columnName":"column X",
+				"value-abc":["ELE","MELE"],
+				"value-xyz":["ELE"]
+			  },
+          "jobValueSource": "highest"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

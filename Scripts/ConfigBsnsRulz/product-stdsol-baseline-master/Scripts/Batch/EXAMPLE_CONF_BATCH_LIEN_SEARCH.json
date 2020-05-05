@@ -1,0 +1,36 @@
+{
+  "batchLienSearch": {
+    "searchCriteria": {
+      "searchByRecordGroup": "",
+      "searchByRecordType": "",
+      "searchByRecordSubType": "",
+      "searchByRecordCategory": "",
+      "searchStatus": "Active",
+      "searchByDaysOut": 1,
+      "searchByFromDate": false,
+      "searchByToDate": false,
+      "nextDateField": "SubGroupX.Next Notification Date",
+      "nextNotificationField": "SubGroupX.Next Notification",
+      "notificationConfScript": "CONF_BATCH_LIEN_PROCESS",
+      "firstNotice": "14 Days Past Due",
+      "excludeRecordType": [
+        {
+          "type": "Licenses/Type/Subtype/Category"
+        },
+        {
+          "type": "Licenses/Type/Subtype/Category"
+        }
+      ],
+      "excludeRecordStatus": [
+        {
+          "status": "Withdrawn"
+        },
+        {
+          "status": "Deceased"
+        }
+      ],
+      "adminEmail": "someone@accela.com",
+      "batchResultEmailTemplate": "BATCH_LICENSE_RENEWAL_RESULTS"
+    }
+  }
+}

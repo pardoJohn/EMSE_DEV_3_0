@@ -1,0 +1,42 @@
+{
+  "Marijuana/Entity/Prequalification/Application": {
+    "ApplicationSpecificInfoUpdateAfter": [
+      {
+        "metadata": {
+          "description": "To Automate owner maintenance on a record",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          
+        },
+        "preScript": "",
+        "action": {
+          "copyGISData": [
+            {
+              "service": "BPTALM",
+              "layer": "Parcel_Owner",
+              "attribute": "OwnerName",
+              "mappingIdField": "FID",
+              "field": "OwnerFullName"
+            },
+            {
+              "service": "BPTALM",
+              "layer": "Parcel_Owner",
+              "attribute": "OwnerAddress",
+              "mappingIdField": "FID",
+              "field": "Address1"
+            }
+          ],
+          "updateRecordOwnerFromRef": "Y",
+          "updateReferenceOwnerFromRec": "N",
+          "retainHistory": "N",
+          "copyConditions": "Y",
+          
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "fromEmail": "civic.solutions@accela.com",
+    "toEmail": [
+      "awdottavio@accela.com",
+      "cli@accela.com",
+      "dbrown@accela.com",
+      "mwright@accela.com",
+      "tcasper@accela.com"
+    ],
+    "notificationTemplate": "AUTO_GENERATED_REPORT",
+    "notificationReport": [
+      "Civic Application Reports List",
+      "Civic Application Record Type List"
+    ]
+  }
+}

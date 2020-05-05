@@ -1,0 +1,30 @@
+{
+	"Building/Permit/TRN3- AirCondition Horse Barn/ACJB" : {
+	    
+	    "WorkflowTaskUpdateAfter":[{
+	    	"metadata": {
+                "description": "Auto route record to a department, and create/find related records based on address",
+                "operators": {
+                  
+                }
+	    	},
+			"preScript": "",										
+			"criteria":{
+			},
+			"action":{
+				"relatedRecordRelation": "parent",								
+				"fireASAEvent": true,									
+				"routeToDept": "Administrator",  
+				"newInspectionGroup": "TRN6_ACHB",								
+				"newInspectionType": "Fire Inspection",
+				"newInspectionPending": false,
+				"inspectDaysAhead": 3,
+				"followUpRecordType": "Building/Permit/TRN3- AirCondition Horse Barn/ACJB", 
+				"followUpRecordStatus": "In Progress",
+				"followUpInspectionType": "Fire Inspection",
+				"relatedRecords":{"Building/Permit/TRN6 AirCondition Horse Barn/ACHB": "In Progress"}
+			},
+			"postScript": ""							
+		}]
+	  }
+}

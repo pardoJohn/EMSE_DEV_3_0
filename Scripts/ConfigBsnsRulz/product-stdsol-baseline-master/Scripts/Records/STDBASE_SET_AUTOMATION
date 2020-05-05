@@ -1,0 +1,278 @@
+/*Title : Set Automation
+ Purpose : Create Set and add records to it
+ Author: Yazan Barghouth
+ Functional Area : After All
+ Description : JSON Example :
+ 
+ {
+  "ServiceRequest/Streets and Sidewalks/Streets/NA": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "preScript": "",
+        "metadata": {
+          "description": "add the record and it's related records to a Set",
+          "operators": {}
+        },
+        "criteria": {
+          "task": "Intake",
+          "status": ["Note"],
+          "allowBalance": true
+        },
+        "action": {
+          "setIDPrefix": "recordId",
+          "setNamePrefix": "recordName",
+          "includeDate": true,
+          "typeOfSet": "Invoice",
+          "statusOfSet": "Open",
+          "allowDuplicateMembers":true,
+          "typeOfChild": "ServiceRequest/Streets and Sidewalks/Streets/NA",
+          "statusOfChild": "Active",
+          "includeParent": true
+        },
+        "postScript ": ""
+      }
+    ]
+  }
+}
+
+Notes:
+-setIDPrefix: any text or recordId to use current recordID
+-setNamePrefix: any text or recordName to use current recordID
+-statusOfChild: if a child status was not matched, the child grand children are not added too
+
+New JSON property:
+- allowDuplicateMembers: boolean [OPTIONAL, default: false], if a record is already in the SET allow adding it again or not
+
+*/
+try {
+	var configurableCommonContent = getScriptText("CONFIGURABLE_SCRIPTS_COMMON");
+	if (configurableCommonContent && configurableCommonContent != null && configurableCommonContent != "") {
+		eval(configurableCommonContent);
+	} else {
+		eval(getScriptText("CONFIGURABLE_SCRIPTS_COMMON", null, true));
+	}
+
+	var settingsArray = [];
+	var scriptSuffix = "SET_AUTOMATION";
+	isConfigurableScript(settingsArray, scriptSuffix);
+
+	for (s in settingsArray) {
+
+		var rules = settingsArray[s];
+		var preScript = rules.preScript;
+		var postScript = rules.postScript;
+
+		if (!isEmptyOrNull(preScript)) {
+			eval(getScriptText(preScript, null, false));
+		}
+		if (cancelCfgExecution) {
+			logDebug("**WARN STDBASE Script [" + scriptSuffix + "] canceled by cancelCfgExecution");
+			cancelCfgExecution = false;
+			continue;
+		}
+
+		if (rules.criteria.hasOwnProperty("allowBalance") && rules.criteria.allowBalance == false) {
+			var capDetails = aa.cap.getCapDetail(capId).getOutput();
+			if (capDetails.getBalance() > 0) {
+				continue;
+			}
+		}//validate allowBalance
+
+		setAutomation(rules);
+
+		if (!isEmptyOrNull(postScript)) {
+			eval(getScriptText(postScript, null, false));
+		}
+	}//for all settingsArray
+
+} catch (ex) {
+	logDebug("**ERROR: Exception while verifying the rules for " + scriptSuffix + ". Error: " + ex);
+}
+
+function setAutomation(rules) {
+
+	var setID = "";
+	var setName = "";
+	var setType = "";
+	var setComment = "by stdbase";
+
+	if (rules.action.typeOfSet) {
+		setType = rules.action.typeOfSet;
+	}
+
+	var allowDuplicateMembers = false;
+	if (rules.action.hasOwnProperty("allowDuplicateMembers")) {
+		allowDuplicateMembers = rules.action.allowDuplicateMembers;
+	}
+
+	var setIDPrfx = rules.action.setIDPrefix;
+	var setNamePrfx = rules.action.setNamePrefix;
+	var includeDate = rules.action.includeDate;
+
+	//if not set, fill with current record ID
+	if (!setIDPrfx || !setNamePrfx) {
+		logDebug("**WARN setIDPrefix and setNamePrefix are required");
+		return false;
+	}
+
+	//prepare setID
+	if (setIDPrfx.toUpperCase() == "RECORDID") {
+		setID = capId.getCustomID();
+	} else {
+		setID = setIDPrfx;
+	}
+
+	//prepare setName
+	if (setNamePrfx.toUpperCase() == "RECORDNAME") {
+		var capBasicInfo = aa.cap.getCapBasicInfo(capId).getOutput();
+		setName = capBasicInfo.getSpecialText();
+	} else {
+		setName = setNamePrfx;
+	}
+
+	if (includeDate) {
+		var datePrefixVal = aa.util.formatDate(new Date(), "MMddyyyy");
+		setID += "_" + datePrefixVal;
+		setName += " " + datePrefixVal;
+	}
+
+	setID += "_Records";
+	setName += " Records";
+
+	var theSet = null;
+	var setRes = aa.set.getSetByPK(setID);
+	if (!setRes.getSuccess() || setRes.getOutput() == null) {
+		var newSetRes = aa.set.createSet(setID, setName, "CAP", setComment);
+		if (newSetRes.getSuccess()) {
+			setRes = aa.set.getSetByPK(setID);
+			theSet = setRes.getOutput();
+			if (rules.action.statusOfSet) {
+				theSet.setSetStatus(rules.action.statusOfSet);
+				theSet.setRecordSetType(setType);
+				aa.set.updateSetHeader(theSet);
+			}
+		} else {
+			logDebug("**WARN could not create SET, setID=" + setID + " setName=" + setName + " setType=" + setType + " Error:" + newSetRes.getErrorMessage());
+			return false;
+		}
+	} else {
+		theSet = setRes.getOutput();
+	}
+
+	if (theSet == null) {
+		logDebug("**WARN could not get or create SET: " + setID + " setName=" + setName + " setType=" + setType);
+		return false;
+	}
+
+	var itemCapIds = null;
+
+	//this is supposed to return array -make use of it-
+	if (rules.action.includeParent) {
+		itemCapIds = getParents("*/*/*/*");
+	}
+
+	//re-init array if required (no parents, or parents not found)
+	if (itemCapIds == null || itemCapIds == false) {
+		itemCapIds = new Array();
+	}
+
+	//append current record capId to caps array
+	itemCapIds.push(capId);
+
+	//find and add child records
+	if (rules.action.typeOfChild) {
+		var children = getChildren(rules.action.typeOfChild, capId);
+
+		//add children
+		if (children != null) {
+
+			//validate children capStatus and add
+			var validChildren = validateStatusAndAdd(children, rules, itemCapIds);
+
+			for (g in validChildren) {
+				//find and add grandchild of valid children
+				var gChildren = getChildren(rules.action.typeOfChild, validChildren[g]);
+				if (gChildren != null && gChildren.length > 0) {
+					//validate gChildren capStatus and add
+					validateStatusAndAdd(gChildren, rules, itemCapIds);
+				}
+			}//for all gchild
+		}//children not null
+	}//typeOfChild is not empty
+
+	var addedCount = addCapsToSet(setID, itemCapIds, allowDuplicateMembers);
+}//setAutomation
+
+function isCapInArray(thisCapId, thisCapIdsArray) {
+	for (var i = 0; i < thisCapIdsArray.length; i++) {
+		var membr = thisCapIdsArray[i];
+		if (membr.getID1() == thisCapId.getID1() && membr.getID2() == thisCapId.getID2() && membr.getID3() == thisCapId.getID3()) {
+			return true;
+		}
+	}//for all set members
+	return false;
+}
+
+function addCapsToSet(setId, itemCapIds, allowDuplicateMembers) {
+	if (itemCapIds == null || itemCapIds.length == 0) {
+		return false;
+	}
+
+	var setMemberArray = null;
+	var addedCapIdsAry = new Array();
+
+	//get set members if allowDuplicateMembers = false
+	if (!allowDuplicateMembers) {
+		var setMemberResult = aa.set.getCAPSetMembersByPK(setId);
+		if (setMemberResult.getSuccess()) {
+			setMemberArray = setMemberResult.getOutput().toArray();
+		} else {
+			logDebug("**WARN Could not get SET members: " + setMemberResult.getErrorMessage());
+			setMemberArray = new Array();
+		}
+	}//allowDuplicateMembers = false
+
+	for ( var x in itemCapIds) {
+
+		//check is capId already a member
+		if (!allowDuplicateMembers) {
+
+			//check if already a set member
+			if (setMemberArray.length > 0 && isCapInArray(itemCapIds[x], setMemberArray)) {
+				logDebug("**INFO SKIP cap id, already a SET member " + itemCapIds[x]);
+				continue;
+			}
+
+			//check if added now (in previous loops)
+			if (addedCapIdsAry.length > 0 && isCapInArray(itemCapIds[x], addedCapIdsAry)) {
+				logDebug("**INFO SKIP cap id, already added now to SET " + itemCapIds[x]);
+				continue;
+			}
+		}//check allowDuplicateMembers and capId exist
+
+		var capAdded = aa.set.addCapSetMember(setId, itemCapIds[x]);
+		if (!capAdded.getSuccess()) {
+			logDebug("**WARN could not add cap:" + itemCapIds[x] + " to SET:" + setId + " Error:" + capAdded.getErrorMessage());
+		} else {
+			addedCapIdsAry.push(itemCapIds[x]);
+		}
+	}//for all capIds
+	return itemCapIds.length;
+}
+
+function validateStatusAndAdd(capIdsAry, rules, destArray) {
+	var validCapIds = new Array();
+	for ( var g in capIdsAry) {
+		if (rules.action.hasOwnProperty("statusOfChild") && rules.action.statusOfChild != "") {
+			var tmpCap = aa.cap.getCap(capIdsAry[g]).getOutput();
+			if (tmpCap.getCapStatus() == rules.action.statusOfChild) {
+				destArray.push(capIdsAry[g]);
+				validCapIds.push(capIdsAry[g]);
+			}
+		} else {
+			destArray.push(capIdsAry[g]);
+			validCapIds.push(capIdsAry[g]);
+		}
+	}//for all capIdsAry
+	return validCapIds;
+}

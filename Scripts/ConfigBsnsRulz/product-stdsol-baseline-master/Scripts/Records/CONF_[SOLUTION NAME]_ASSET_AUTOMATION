@@ -1,0 +1,70 @@
+ {
+  "EnvHealth/Food Retail/Food Facility/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Create Food Facility Asset",
+          "operators": {
+            
+          }
+        },
+        "preScript": "",
+        "criteria": {
+          "customFields": {
+            "Create New Facility": "Yes"
+          },
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "updateExistedRefAsset": true,
+          "assetType": "Drainage Main",
+          "assetGroup": "Health",
+          "checkExistingAsset": true,
+          "dateOfService": "",
+          "copyAppNameToDescription": true,
+          "status": "Active",
+          "copyContacts": [
+            "Facility Owner",
+            "Property Manager"
+          ],
+          "copyAddress": [
+            "ALL"
+          ],
+          "customFieldsAttributeMapping": {
+            "asiFieldName1": "AttributeField1",
+            "asiFieldName2": "AttributeField2"
+          },
+          "customFieldsDefaultMapping": {
+            "G1AssetGroup": "asi_G1AssetGroup",
+            "G1AssetType": "asi_G1AssetType",
+            "G1Description": "asi_G1Description",
+            "DateOfService": "asi_DateOfService",
+            "G1ClassType": "asi_G1ClassType",
+            "G1AssetStatus": "asi_G1AssetStatus",
+            "StartValue": "asi_StartValue",
+            "CurrentValue": "asi_CurrentValue",
+            "DepreciationValue": "asi_DepreciationValue",
+            "DepreciationAmount": "asi_DepreciationAmount",
+            "StartDate": "asi_StartDate",
+            "EndDate": "asi_EndDate",
+            "SalvageValue": "asi_SalvageValue",
+            "UseFulLife": "asi_UseFulLife",
+            "AssetSize": "asi_AssetSize",
+            "SizeUnit": "asi_SizeUnit"
+          },
+          "linkParent": true,
+          "copyDocumentTypes": [
+            "Site Plan",
+            "Building Plan"
+          ]
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

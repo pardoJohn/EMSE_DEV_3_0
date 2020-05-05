@@ -1,0 +1,41 @@
+{
+  "Planning/Special Request/Zoning Inquiry/NA": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "preScript": "",
+        "metadata": {
+          "description": "Meeting Automation",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "task": [
+            "Assign Zoning Inquiry"
+          ],
+          "status": [
+            "Additional Information"
+          ]
+        },
+        "action": {
+          "meetingAction": "create",
+          "meetingCalendarName": "Planning Commission",
+          "meetingName": "Zoning Inquiry",
+          "meetingBody": "Planning Commission",
+          "meetingSubject": "Zoning Meeting",
+          "meetingLocation": "Planning Commission Room",
+          "meetingStatus": "",
+          "meetingDate": "10/12/2018",
+          "startTime": "08:00",
+          "endTime": "12:00",
+          "comments": "test",
+          "reason": "test",
+          "emailTo": "Applicant",
+          "emailNotificationTemplate": "MESSAGE_NOTICE_MEETING_REMINDER",
+          "addOutlookMeetingFor": "YBARGHOUTH"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}
