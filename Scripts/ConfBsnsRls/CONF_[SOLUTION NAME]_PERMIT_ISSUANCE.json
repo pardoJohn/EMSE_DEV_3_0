@@ -1,0 +1,39 @@
+{
+  "Building/Residential/New/NA": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "permit record update",
+          "operators": {
+            
+          }
+        },
+        "preScript": "",
+        "criteria": {
+          "allowBalance": false,
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "activateTask": ["task-1"],
+          "deactivateTask": ["task-2"],
+          "updateTask": [
+            {
+              "task": "Intake",
+              "status": "Accepted"
+            }
+          ],
+          "issuedStatus": "Active",
+          "expirationStatus": "Active",
+          "expirationDaysOut": 180,
+          "setName": "BUILDING_PERMIT_"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "Licenses/Business/Retail/Application": {
+    "ApplicationSubmitAfter": [
+      {
+        "metadata": {
+          "description": "To Send Emails to staff and contain certain criteria",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          
+        },
+        "preScript": "",
+        "action": {
+          "notificationTemplate": "APPLICATION_SUBMITTED",
+          "notificationReport": "",
+          "staff": "Record Assigned",
+          "fromEmail": "noreply@accela.com"
+        },
+        "postScript": ""
+      }
+    ],
+    "InspectionResultSubmitAfter": [
+      {
+        "metadata": {
+          "description": "To Send Emails to staff and contain certain criteria",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "inspectionTypePerformed": [
+            "inspeTypeX"
+          ],
+          "inspectionResult": [
+            "inspeResultY"
+          ]
+        },
+        "preScript": "",
+        "action": {
+          "notificationTemplate": "INSPECTION_SUBMITTED",
+          "notificationReport": "",
+          "staff": "Supervisor",
+          "fromEmail": "noreply@accela.com"
+        },
+        "postScript": ""
+      }
+    ],
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "To Send Emails to staff and contain certain criteria",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "task": [
+            "Zoning Review"
+          ],
+          "status": [
+            "Clearance Received"
+          ]
+        },
+        "preScript": "",
+        "action": {
+          "notificationTemplate": "CLEARANCE_RECEIVED",
+          "notificationReport": "",
+          "staff": "Workflow Assigned",
+          "fromEmail": "noreply@accela.com"
+        },
+        "postScript": ""
+      },
+      {
+        "metadata": {
+          "description": "To Send Emails to staff and contain certain criteria",
+          "operators": {
+            
+          }
+        },
+        "criteria": {
+          "task": [
+            "Initial Review"
+          ],
+          "status": [
+            "Approved"
+          ]
+        },
+        "preScript": "",
+        "action": {
+          "notificationTemplate": "PAYMENT_DUE",
+          "notificationReport": "",
+          "staff": "ADMIN",
+          "fromEmail": "noreply@accela.com"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}
