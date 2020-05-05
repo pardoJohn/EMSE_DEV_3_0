@@ -167,6 +167,17 @@ function isConfigurableScript(settingsArray, jsonFileSuffix) {
 						settingsArray.push(recordTypeEventRules[x]);
 					}//event 2nd level matched
 				}//event 1st level matched
+			} else if (controlString.indexOf("Inspection") > -1 && controlString.indexOf("Cancel") > -1 && typeof inspType != "undefined") {
+				var evalResult = evaluateBooleanVinA(criteria["inspectionTypePerformed"], inspType, getLogicalOp(recordTypeEventRules[x], "inspectionTypePerformed"));
+				if (evalResult || criteria["inspectionTypePerformed"] == null || criteria["inspectionTypePerformed"] === undefined) {
+					if (evalResult) {
+						var primaryCriResult = checkPrimaryCriteria(criteria, operators);
+						if (!primaryCriResult) {
+							continue;
+						}
+						settingsArray.push(recordTypeEventRules[x]);
+					}
+				}//event 1st level matched
 			} else if (controlString.indexOf("InspectionMultipleSchedule") > -1 || controlString.indexOf("InspectionSchedule") > -1) {
 				var evalResult = evaluateBooleanVinA(criteria["inspectionTypePerformed"], inspType, getLogicalOp(recordTypeEventRules[x], "inspectionTypePerformed"));
 				if (evalResult || criteria["inspectionTypePerformed"] == null || criteria["inspectionTypePerformed"] === undefined) {
