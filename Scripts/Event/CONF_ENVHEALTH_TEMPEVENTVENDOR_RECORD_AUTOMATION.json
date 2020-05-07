@@ -1,0 +1,83 @@
+{
+  "EnvHealth/Food Retail/Temporary Event Vendor/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "assess app fees",
+          "operators": {
+            
+          }
+        },
+        "preScript": "",
+        "criteria": {
+          "customFields": {
+            "One time Event or Season": "One Time Event",
+            "Risk": "High",
+            "Veterans Exemption": "No",
+            "Non Profit": "No"
+          },
+          "task": ["Application Intake"],
+          "status": ["Accepted"],
+          "workFlow": {
+           
+          },
+          "isCreatedByACA": false,
+          "isACAEvent": false,
+          "recordStatus": "",
+          "balanceAllowed": true,
+          
+        },
+        "action": {
+          "updateOpenDate": true,
+          "saveCreationDate": true,
+          "activateTask": [
+            
+          ],
+          "daysOut": "10",
+          "useCalendarDays": false,
+          "deactivateTask": [
+            
+          ],
+          "deleteTask": [
+            
+          ],
+          "updateTask": [
+	         {
+	           "task": "",
+	           "status": ""
+	         }
+	       ],
+          "invoiceFees": "Y",
+          "createChild": "",
+          "createParent": "",
+          "addCondition": "",
+          "addConditionSeverity": " ",
+          "addConditionType": "",
+          "removeConditionType": "",
+          "removeCondition": "",
+          "addComment": "",
+          "newStatus": "",
+          "assignToUserID": "",
+          "assessFees": [
+            {
+              "feeSchedule": "SC_EH_TEMP_VEND",
+              "feeCode": "648",
+              "feeQuantity": 1,
+              "feeInvoice": "Y",
+              "feePeriod": "FINAL"
+            }
+          ],
+          "updateExpDate": {
+            "expirationType": "",
+            "expirationPeriod": "",
+            "destination": "", 
+            "asiName": "",
+            "customExpirationFunction": ""
+          },
+          "primaryContactType": "Applicant"
+        },
+        "postScript": ""
+      }
+    ]
+  }
+}
