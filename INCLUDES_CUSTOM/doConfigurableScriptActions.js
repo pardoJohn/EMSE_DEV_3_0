@@ -1,6 +1,5 @@
 function doConfigurableScriptActions(){
 try{
-	logDebug("Vote for Pedro!");
 	var module = false;
 	if(appTypeArray && appTypeArray[0] != undefined){
 		module = appTypeArray[0];
@@ -11,8 +10,9 @@ try{
 			var itemCap = iCap.getOutput();
 			var itemCapModel = itemCap.getCapModel();
 			module = itemCapModel.getModuleName();
+			logDebug(sepMsg);
 		}else{
-			logDebug("Error retrieving module value: " + iCap.getErrorMessage());
+			logDebug("Error retrieving module value: " + sepMsg + iCap.getErrorMessage());
 			return false;
 		}
 	}
