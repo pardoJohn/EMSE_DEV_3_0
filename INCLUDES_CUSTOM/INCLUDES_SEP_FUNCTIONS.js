@@ -556,8 +556,8 @@ try{
 		rFiles = [];
 	}
 	var result = null;
-	logDebug("rName: " +rName);
-	logDebug("priEmail: " +priEmail);
+	//logDebug("rName: " +rName);
+	//logDebug("priEmail: " +priEmail);
 	result = aa.document.sendEmailAndSaveAsDocument(emailFrom, priEmail, null, notName, eParams, capIDScriptModel, rFiles);
 	if(result.getSuccess()){
 		logDebug("Sent email successfully!");
@@ -829,7 +829,10 @@ try{
 						if(sepRules[row]["Active"]=="Yes"){
 							var taskName = ""+sepRules[row]["Task Name"];
 							var taskStatus = ""+sepRules[row]["Task Status"];
-							if(!matches(taskName,"",null,"undefined" || wfTask==taskName) && wfStatus==taskStatus){
+							if((matches(taskName,"",null,"undefined") || wfTask==taskName) && wfStatus==taskStatus){
+								if(matches(taskName,"",null,"undefined")){
+									taskName = "Current Task";
+								}
 								var appMatch = true;
 								var recdType = ""+sepRules[row]["Record Type"];
 								var recdTypeArr = "" + recdType;
@@ -848,186 +851,191 @@ try{
 									addtlQuery = ""+sepRules[row]["Additional Query"];
 									logDebug("Additional Query field: " + addtlQuery);
 									var chkFilter = ""+addtlQuery;
-									if (chkFilter.length==0 ||eval(chkFilter) ) {
-										switch("" + sepRules[row]["Event"]){
-										case "Fees Due": 
-											var strFee = ""+ sepRules[row]["Required Elements List"];
-											var feeBal = 0;
-											var feesDue = [];
-											if(strFee.length>0){
-												var arrFee = strFee.split("|");
-												for (fee in arrFee){
-													feeBal += sepFeeBalance(arrFee[fee]);
-													if(sepFeeBalance(arrFee[fee])>0){
-														feesDue.push(arrFee[fee]);
-													}
-												}
-											}else{
-												feeBal = sepFeeBalance();
-											}
-											if(feeBal>0){
-												cancel=true;
-												showMessage=true;
-												comment( "'"+ taskName + "' cannot be set to '" + taskStatus + "' when there is an outstanding balance ($" + feeBal.toFixed(2) + ") of these fees: " );
-												if(feesDue.length==0){
-													comment("--All Fees--");
-												}else{
-													for( x in feesDue){
-														comment(feesDue[x]);
-													}
+									if (chkFilter.length > 0 && !eval(chkFilter) ) {
+										cancel=true;
+										showMessage=true;
+										comment( "'"+ chkFilter + "' must resolve to 'true' before proceeding." );
+									}
+									switch("" + sepRules[row]["Event"]){
+									case "Fees Due": 
+										var strFee = ""+ sepRules[row]["Required Elements List"];
+										var feeBal = 0;
+										var feesDue = [];
+										if(strFee.length>0){
+											var arrFee = strFee.split("|");
+											for (fee in arrFee){
+												feeBal += sepFeeBalance(arrFee[fee]);
+												if(sepFeeBalance(arrFee[fee])>0){
+													feesDue.push(arrFee[fee]);
 												}
 											}
-											break;
-										case "Inspections Scheduled":
-											var inspScheduled = false;
-											var strInsp = ""+sepRules[row]["Required Elements List"];
-											var inspDue = [];
-											if(strInsp.length>0){
-												var arrInsp = strInsp.split("|");
-												for (ins in arrInsp){
-													if(checkInspectionResult(arrInsp[ins], "Scheduled") || checkInspectionResult(arrInsp[ins], "Pending")){
-														inspScheduled = true;
-														inspDue.push(arrInsp[ins]);
-													}
-												}
-											}else{
-												if(isScheduled(false)){
-													inspScheduled = true;
-												}
-											}
-											if(inspScheduled){
-												cancel=true;
-												showMessage=true;
-												comment( "'"+ taskName + "' cannot be set to '" + taskStatus + "' when these inspections are scheduled or pending: " );
-												if(inspDue.length==0){
-													comment("--All Inspections--");
-												}else{
-													for( x in inspDue){
-														comment(inspDue[x]);
-													}
-												}
-											}
-											break;
-										case "Documents Required":
-											var submittedDocList = aa.document.getDocumentListByEntity(capId,"CAP").getOutput().toArray();
-											uploadedDocs = new Array();
-											for (var i in submittedDocList ){
-												uploadedDocs[submittedDocList[i].getDocGroup() +"-"+ submittedDocList[i].getDocCategory()] = true;
-											}
-											var strDoc =  ""+ sepRules[row]["Required Elements List"];
-											var arrDoc = strDoc.split("|");
-											var retArray = [];
-											for (doc in arrDoc){
-												if(arrDoc[doc].indexOf(",")<0){
-													comment("Document List is incorrectly formatted: a group and type, separated by a comma, is required: " + strDoc);
-													return false;
-												}
-												var thisDoc = arrDoc[doc].split(",");
-												var dGroup = thisDoc[0];
-												var dType = thisDoc[1];
-												var docGroup = dGroup.trim();
-												var docType = dType.trim();
-												if(uploadedDocs[docGroup +"-"+ docType] == undefined) {	
-													var thisArray = [];
-													thisArray["docGroup"]=docGroup;
-													thisArray["docType"]=docType;
-													retArray.push(thisArray);
-												}
-											}
-											if(retArray.length>0){
-												cancel=true;
-												showMessage=true;
-												comment("'"+ taskName + "' cannot be set to '" + taskStatus + "' when these documents are required: ");
-												for( x in retArray){
-													comment(retArray[x]["docGroup"] + " - " + retArray[x]["docType"]);
-												}
-											}
-											break;
-										case "Child Records Status":
-											var canProceed = false;
-											var strChildInfo = ""+ sepRules[row]["Required Elements List"];
-											var arrChildRecs = [];
-											if(strChildInfo.length>0){
-												var arrChildRecs = strChildInfo.split("|");
-												for (ch in arrChildRecs){
-													arrThisChild = arrChildRecs[ch].split(",");
-													var arrChildren = getChildren(arrThisChild[0]);
-													var status2Chk = ""+arrThisChild[1];
-													if(status2Chk.toUpperCase()=="ANY"){
-														canProceed =- true;
-													}else{
-														var badStatus=false;
-														for(st in arrChildren){
-															var chCap = aa.cap.getCap(arrChildren[st]).getOutput();
-															if(chCap.getCapStatus().toUpperCase()!=status2Chk.toUpperCase()){
-																badStatus=true;
-															}
-														}
-														if(badStatus){
-															canProceed=false;
-														}
-													}		
-												}
-											}else{
-												canProceed=false;
-											}
-											if(!canProceed){
-												cancel=true;
-												showMessage=true;
-												comment( "'"+ taskName + "' cannot be set to '" + taskStatus + "' when either there is no child record of the type " );
-												if(feesDue.length==0){
-													comment("--All Fees--");
-												}else{
-													for( x in feesDue){
-														comment(feesDue[x]);
-													}
-												}
-											}
-											break;
-										case "Custom Fields":
-											var canProceed = true;
-											var strAsi = ""+sepRules[row]["Required Elements List"];
-											var asiBad = [];
-											if(strAsi.length>0){
-												var arrAsi = strAsi.split(",");
-												for (fld in arrAsi){
-													var thisAsi = ""+arrAsi[fld];
-													var symbols = "!=<>";
-													var validAsi = false;
-													for(var i=0,l=symbols.length;i<l;i++){
-														if(thisAsi.indexOf(symbols.charAt(i)) >-1){ 
-															validAsi = true;
-															if(thisAsi.indexOf("AInfo")<0){
-																var subIdx = thisAsi.indexOf(symbols.charAt(i));
-																var asiName = "AInfo['" + thisAsi.substr(0,subIdx) +"']"
-																var asiCompare = asiName + thisAsi.substr(subIdx, thisAsi.length);
-															}else{
-																var asiCompare = thisAsi;
-															}
-														}
-													}
-													if(!validAsi){
-														comment(thisAsi + " does not resolve to a valid query. It must be set up with a custom field name, a comparison operator (one of '>','<','==','!=', '>=', '<=') and a comparison value. No comparison is being done for this row.");
-													}else{
-														if(!eval(asiCompare)){
-															canProceed = false;
-															asiBad.push(thisAsi);
-														}
-													}
-												}
-											}else{
-												comment("The 'Required Elements List' is empty. No custom field comparisons are being made.");
-											}
-											if(!canProceed){
-												cancel=true;
-												showMessage=true;
-												comment( "'"+ taskName + "' cannot be set to '" + taskStatus + "' when these custom fields are set to these values: " );
-												for( x in asiBad){
-													comment("---" + asiBad[x] + "<br>");
-												}
-											}
-											break;
+										}else{
+											feeBal = sepFeeBalance();
 										}
+										if(feeBal>0){
+											cancel=true;
+											showMessage=true;
+											comment( taskName + " cannot be set to '" + taskStatus + "' when there is an outstanding balance ($" + feeBal.toFixed(2) + ") of these fees: " );
+											if(feesDue.length==0){
+												comment("--All Fees--");
+											}else{
+												for( x in feesDue){
+													comment(feesDue[x]);
+												}
+											}
+										}
+										break;
+									case "Inspections Scheduled":
+										var inspScheduled = false;
+										var strInsp = ""+sepRules[row]["Required Elements List"];
+										var inspDue = [];
+										if(strInsp.length>0){
+											var arrInsp = strInsp.split("|");
+											for (ins in arrInsp){
+												if(checkInspectionResult(arrInsp[ins], "Scheduled") || checkInspectionResult(arrInsp[ins], "Pending")){
+													inspScheduled = true;
+													inspDue.push(arrInsp[ins]);
+												}
+											}
+										}else{
+											if(isScheduled(false)){
+												inspScheduled = true;
+											}
+										}
+										if(inspScheduled){
+											cancel=true;
+											showMessage=true;
+											comment( taskName + " cannot be set to '" + taskStatus + "' when these inspections are scheduled or pending: " );
+											if(inspDue.length==0){
+												comment("--All Inspections--");
+											}else{
+												for( x in inspDue){
+													comment(inspDue[x]);
+												}
+											}
+										}
+										break;
+									case "Documents Required":
+										var submittedDocList = aa.document.getDocumentListByEntity(capId,"CAP").getOutput().toArray();
+										uploadedDocs = new Array();
+										for (var i in submittedDocList ){
+											uploadedDocs[submittedDocList[i].getDocGroup() +"-"+ submittedDocList[i].getDocCategory()] = true;
+										}
+										var strDoc =  ""+ sepRules[row]["Required Elements List"];
+										var arrDoc = strDoc.split("|");
+										var retArray = [];
+										for (doc in arrDoc){
+											if(arrDoc[doc].indexOf(",")<0){
+												comment("Document List is incorrectly formatted: a group and type, separated by a comma, is required: " + strDoc);
+												return false;
+											}
+											var thisDoc = arrDoc[doc].split(",");
+											var dGroup = thisDoc[0];
+											var dType = thisDoc[1];
+											var docGroup = dGroup.trim();
+											var docType = dType.trim();
+											if(uploadedDocs[docGroup +"-"+ docType] == undefined) {	
+												var thisArray = [];
+												thisArray["docGroup"]=docGroup;
+												thisArray["docType"]=docType;
+												retArray.push(thisArray);
+											}
+										}
+										if(retArray.length>0){
+											cancel=true;
+											showMessage=true;
+											comment("'"+ taskName + " cannot be set to '" + taskStatus + "' when these documents are required: ");
+											for( x in retArray){
+												comment(retArray[x]["docGroup"] + " - " + retArray[x]["docType"]);
+											}
+										}
+										break;
+									case "Child Records Status":
+										var canProceed = false;
+										var strChildInfo = ""+ sepRules[row]["Required Elements List"];
+										var arrChildRecs = [];
+										if(strChildInfo.length>0){
+											var arrChildRecs = strChildInfo.split("|");
+											for (ch in arrChildRecs){
+												arrThisChild = arrChildRecs[ch].split(",");
+												var arrChildren = getChildren(arrThisChild[0]);
+												var status2Chk = ""+arrThisChild[1];
+												if(status2Chk.toUpperCase()=="ANY"){
+													canProceed =- true;
+												}else{
+													var badStatus=false;
+													for(st in arrChildren){
+														var chCap = aa.cap.getCap(arrChildren[st]).getOutput();
+														if(chCap.getCapStatus().toUpperCase()!=status2Chk.toUpperCase()){
+															badStatus=true;
+														}
+													}
+													if(badStatus){
+														canProceed=false;
+													}
+												}		
+											}
+										}else{
+											canProceed=false;
+										}
+										if(!canProceed){
+											cancel=true;
+											showMessage=true;
+											comment( taskName  + " cannot be set to '" + taskStatus + "' when either there is no child record of the type " );
+											if(feesDue.length==0){
+												comment("--All Fees--");
+											}else{
+												for( x in feesDue){
+													comment(feesDue[x]);
+												}
+											}
+										}
+										break;
+									case "Custom Fields":
+										var canProceed = true;
+										var strAsi = ""+sepRules[row]["Required Elements List"];
+										var asiBad = [];
+										if(strAsi.length>0){
+											var arrAsi = strAsi.split(",");
+											for (fld in arrAsi){
+												var thisAsi = ""+arrAsi[fld];
+												var symbols = "!=<>";
+												var validAsi = false;
+												for(var i=0,l=symbols.length;i<l;i++){
+													if(thisAsi.indexOf(symbols.charAt(i)) >-1){ 
+														validAsi = true;
+														if(thisAsi.indexOf("AInfo")<0){
+															var subIdx = thisAsi.indexOf(symbols.charAt(i));
+															var asiName = "AInfo['" + thisAsi.substr(0,subIdx-1) +"']"
+															var asiCompare = asiName + thisAsi.substr(subIdx-1, thisAsi.length);
+														}else{
+															var asiCompare = thisAsi;
+														}
+													}
+												}
+												if(!validAsi){
+													comment(thisAsi + " does not resolve to a valid query. It must be set up with a custom field name, a comparison operator (one of '>','<','==','!=', '>=', '<=') and a comparison value. No comparison is being done for this row.");
+												}else{
+													logDebug("asiCompare: " +asiCompare);
+													if(!eval(asiCompare)){
+														logDebug("asiCompare: " + asiCompare);
+														canProceed = false;
+														asiBad.push(thisAsi);
+													}
+												}
+											}
+										}else{
+											comment("The 'Required Elements List' is empty. No custom field comparisons are being made.");
+										}
+										if(!canProceed){
+											cancel=true;
+											showMessage=true;
+											comment( taskName  + " cannot be set to '" + taskStatus + "' when these custom fields do not pass these rules: " );
+											for( x in asiBad){
+												comment("---" + asiBad[x]);
+											}
+										}
+										break;
 									}
 								}
 							}
@@ -1087,10 +1095,11 @@ try{
 				var sepScriptConfigArr = sepScriptConfig.getOutput();
 			}
 		}
-		if(sepScriptConfigArr.length>0){
+		if(sepScriptConfigArr.length>0){ 
 			for(sep in sepScriptConfigArr){
 				var cfgCapId = sepScriptConfigArr[sep].getCapID();
 				var sepRules = loadASITable("LICENSE ISSUANCE - ON WORKFLOW",cfgCapId);
+				var sysFromEmail = getAppSpecific("Agency From Email",cfgCapId);
 				if(sepRules.length>0){
 					for(row in sepRules){
 						if(sepRules[row]["Active"]=="Yes"){
@@ -1225,6 +1234,7 @@ try{
 													aa.continuingEducation.copyContEducationList(capId, parCapId);
 												}
 												var notName = "" + sepRules[row]["Notification Name"];
+												var rName = "" + sepRules[row]["Report Name"];
 												if(!matches(notName, "","undefined",null)){
 													var cntType = ""+sepRules[row]["Contacts Receiving Notice"];
 													if(cntType.indexOf(",")>-1){
