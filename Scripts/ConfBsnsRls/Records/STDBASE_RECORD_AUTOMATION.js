@@ -5,82 +5,82 @@ Functional Area : ACA,AV Events
 Description : JSON Example :
 {
   "Marijuana/Combo/Testing Facility/License": {
-    "WorkflowTaskUpdateAfter": [
-      {
-        "metadata": {
-          "description": "test records",
-          "operators": {
-            
-          }
-        },
-        "preScript": "",
-        "criteria": {
-          "customFields": {
-            "Gross Annual Sales": "12"
-          },
-          "task": ["License Status"],
-          "status": ["Active"],
-          "workFlow": {
-           
-          },
-          "isCreatedByACA": false,
-          "isACAEvent": false,
-          "recordStatus": "",
-          "balanceAllowed": true,
-          
-        },
-        "action": {
-          "updateOpenDate": true,
-          "saveCreationDate": true,
-          "activateTask": [
-            
-          ],
-          "daysOut": "10",
-          "useCalendarDays": false,
-          "deactivateTask": [
-            
-          ],
-          "deleteTask": [
-            
-          ],
-          "updateTask": [
-	         {
-	           "task": "Permit Issuance",
-	           "status": "Issued"
-	         }
-	       ],
-          "invoiceFees": "",
-          "createChild": "Marijuana/Combo/Testing Facility/Application",
-          "createParent": "",
-          "addCondition": "",
-          "addConditionSeverity": " ",
-          "addConditionType": "",
-          "removeConditionType": "",
-          "removeCondition": "",
-          "addComment": "test Status",
-          "newStatus": "",
-          "assignToUserID": "",
-          "assessFees": [
-            {
-              "feeSchedule": "",
-              "feeCode": "",
-              "feeQuantity": 1,
-              "feeInvoice": "",
-              "feePeriod": ""
-            }
-          ],
-          "updateExpDate": {
-            "expirationType": "Days",
-            "expirationPeriod": "10",
-            "destination": "ExpDate", 
-            "asiName": "RENEWAL INFO.Next Notification Date",
-            "customExpirationFunction": "testFunction"
-          },
-          "primaryContactType": "Applicant"
-        },
-        "postScript": ""
-      }
-    ]
+	"WorkflowTaskUpdateAfter": [
+	  {
+		"metadata": {
+		  "description": "test records",
+		  "operators": {
+			
+		  }
+		},
+		"preScript": "",
+		"criteria": {
+		  "customFields": {
+			"Gross Annual Sales": "12"
+		  },
+		  "task": ["License Status"],
+		  "status": ["Active"],
+		  "workFlow": {
+		   
+		  },
+		  "isCreatedByACA": false,
+		  "isACAEvent": false,
+		  "recordStatus": "",
+		  "balanceAllowed": true,
+		  
+		},
+		"action": {
+		  "updateOpenDate": true,
+		  "saveCreationDate": true,
+		  "activateTask": [
+			
+		  ],
+		  "daysOut": "10",
+		  "useCalendarDays": false,
+		  "deactivateTask": [
+			
+		  ],
+		  "deleteTask": [
+			
+		  ],
+		  "updateTask": [
+			 {
+			   "task": "Permit Issuance",
+			   "status": "Issued"
+			 }
+		   ],
+		  "invoiceFees": "",
+		  "createChild": "Marijuana/Combo/Testing Facility/Application",
+		  "createParent": "",
+		  "addCondition": "",
+		  "addConditionSeverity": " ",
+		  "addConditionType": "",
+		  "removeConditionType": "",
+		  "removeCondition": "",
+		  "addComment": "test Status",
+		  "newStatus": "",
+		  "assignToUserID": "",
+		  "assessFees": [
+			{
+			  "feeSchedule": "",
+			  "feeCode": "",
+			  "feeQuantity": 1,
+			  "feeInvoice": "",
+			  "feePeriod": ""
+			}
+		  ],
+		  "updateExpDate": {
+			"expirationType": "Days",
+			"expirationPeriod": "10",
+			"destination": "ExpDate", 
+			"asiName": "RENEWAL INFO.Next Notification Date",
+			"customExpirationFunction": "testFunction"
+		  },
+		  "primaryContactType": "Applicant"
+		},
+		"postScript": ""
+	  }
+	]
   }
 }
 Available Types: contactFields, customFields, customLists, parcelFields, addressFields, lpFields,Appstatus
@@ -110,14 +110,12 @@ try {
 	var scriptSuffix = "RECORD_AUTOMATION";
 	var settingsArray = [];
 	isConfigurableScript(settingsArray, scriptSuffix);
-
 	for (s in settingsArray) {
 		var rules = settingsArray[s];
 		var operators = rules.metadata.operators;
 		var criteria = rules.criteria;
 		var recordStatus = criteria.recordStatus;
 		var isACAEvent = criteria.isACAEvent;
-
 		/*
 		isCreatedByACA is made optional, to avoid make below existing logic complex, 
 		isCreatedByACA is filled from cap if it was not provided in JSON
@@ -130,7 +128,6 @@ try {
 
 		var balanceAllowed = criteria.balanceAllowed;
 		var wfRules = criteria.workFlow;
-
 		var preScript = rules.preScript;
 		var postScript = rules.postScript;
 		var daysOut = rules.action.daysOut;
@@ -156,6 +153,7 @@ try {
 
 		var updateOpenDate = rules.action.updateOpenDate;
 		var saveCreationDate = rules.action.saveCreationDate;
+		logDebug("Here");
 
 		useAppSpecificGroupNametmp = useAppSpecificGroupName;
 		// run preScript

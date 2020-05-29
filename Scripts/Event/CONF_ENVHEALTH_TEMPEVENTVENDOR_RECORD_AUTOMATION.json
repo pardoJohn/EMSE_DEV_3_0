@@ -1,6 +1,6 @@
 {
   "EnvHealth/Food Retail/Temporary Event Vendor/Application": {
-    "WorkflowTaskUpdateAfter": [
+    "WorkflowTaskUpdateBefore": [
       {
         "metadata": {
           "description": "assess app fees",
@@ -11,17 +11,17 @@
         "preScript": "",
         "criteria": {
           "customFields": {
-            "One time Event or Season": "One Time Event",
+            "One Time Event or Seasonal": "One Time Event",
             "Risk": "High",
             "Veterans Exemption": "No",
             "Non Profit": "No"
           },
           "task": ["Application Intake"],
-          "status": ["Accepted"],
+          "status": ["In Progress"],
           "workFlow": {
            
           },
-          "isCreatedByACA": false,
+          "_isCreatedByACA": false,
           "isACAEvent": false,
           "recordStatus": "",
           "balanceAllowed": true,

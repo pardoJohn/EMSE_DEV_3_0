@@ -59,7 +59,8 @@ Description : JSON must contain :
 	          ],
 			"rangeType":"Days",										//valid values are "Days" or "Months"
 			"range": 14,											//number in rangeType (i.e., 30 Days, 2 Months, etc)
-			"assignment":"Auto",									//how to assign an inspector, if "Auto", will use function autoAssign, if "Record", assign to person assigned to the record, if blank, will look for value in inspector field. If no value, will schedule w/o assignment.
+			"assignment":"Auto",									
+																	//how to assign an inspector, if "Auto", will use function autoAssign, if "Record", assign to 	person assigned to the record, if blank, will look for value in inspector field. If no value, will schedule w/o assignment.
 			"inspector":"",											//specific inspector userid to assign inspection to, assignment field should be left blank
 			"department":"",										//seven level structure of department (i.e., Agency/Licenses/Inspections/NA/NA/NA/NA)
 			"comments": "Inspection Scheduled via EMSE",			//any comments to include on the inspection
