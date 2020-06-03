@@ -1,5 +1,5 @@
 
-//assess fees test
+//assess fees
 try{
 	//see if any records are set up--module can be specific or "ALL", look for both
 	var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", appTypeArray[0]);
