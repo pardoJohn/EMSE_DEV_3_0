@@ -401,7 +401,14 @@ try{
 								var cklDateSubGroup = cldSGroup.trim();
 								var cldField = ""+chklstDateFieldName;
 								var cklDateField = cldField.trim();
-								var dtSched = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+								//logDebug("inspId: " +inspId);
+								//logDebug("cklDateName: " +cklDateName);
+								//logDebug("cklDateItem: " +cklDateItem);
+								//logDebug("cklDateGroup: " +cklDateGroup);
+								//logDebug("cklDateSubGroup: " +cklDateSubGroup);
+								//logDebug("cklDateField: " +cklDateField);
+								var dtSchedDays = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+								var dtSched = dateAdd(sysDate,parseInt(dtSchedDays));
 							}else{
 								var pendOrSched = ""+pendSched;
 								if(pendOrSched.toUpperCase()=="PENDING"){
@@ -419,21 +426,22 @@ try{
 										}
 									}
 								}
-								scheduleInspectDate(insNewType,dtSched);
-								if(!matches(inspectorId,"",null,"undefined")){
-									var inspId = getScheduledInspId(insNewType);
-									inspId = ""+inspId;
-									inspectorId = ""+inspectorId;
-									if(inspectorId.toUpperCase()=="AUTO"){
-										autoAssignInspection(inspId);
-									}else{
-										if(inspectorId.toUpperCase()=="PRIOR"){
-											var lastInspid = ""+getLastInspector(insType);
-											if(lastInspid!=null){
-												assignInspection(inspId, lastInspid);
-											}else{
-												assignInspection(inspId, inspectorId);
-											}
+							}
+							logDebug("dtSched: " + dtSched);
+							scheduleInspectDate(insNewType,dtSched);
+							if(!matches(inspectorId,"",null,"undefined")){
+								var newInspId = getScheduledInspId(insNewType);
+								newInspId = ""+newInspId;
+								inspectorId = ""+inspectorId;
+								if(inspectorId.toUpperCase()=="AUTO"){
+									autoAssignInspection(newInspId);
+								}else{
+									if(inspectorId.toUpperCase()=="PRIOR"){
+										var lastInspid = ""+getLastInspector(insType);
+										if(lastInspid!=null){
+											assignInspection(newInspId, lastInspid);
+										}else{
+											assignInspection(newInspId, inspectorId);
 										}
 									}
 								}
