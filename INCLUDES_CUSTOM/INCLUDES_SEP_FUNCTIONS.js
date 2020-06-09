@@ -374,7 +374,7 @@ try{
 		logDebug("appMatch");
 		var chkFilter = ""+addtlQuery;
 		logDebug("Additional Query field: " + addtlQuery);
-		if ((chkFilter.length==0 ||eval(chkFilter)) && inspType==sInsType && inspResult==sInsResult) {
+		if ((chkFilter.length==0 ||eval(chkFilter)) && inspType.toString()==sInsType.toString() && inspResult.toString()==sInsResult.toString()) {
 			if(insNewGroup){
 				var cFld = ""+asiField;
 				var custFld = cFld.trim();
@@ -408,7 +408,9 @@ try{
 								//logDebug("cklDateSubGroup: " +cklDateSubGroup);
 								//logDebug("cklDateField: " +cklDateField);
 								var dtSchedDays = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
-								var dtSched = dateAdd(sysDate,parseInt(dtSchedDays));
+								if(dtSchedDays){
+									var dtSched = dateAdd(sysDate,parseInt(dtSchedDays));
+								}
 							}else{
 								var pendOrSched = ""+pendSched;
 								if(pendOrSched.toUpperCase()=="PENDING"){
