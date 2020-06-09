@@ -240,7 +240,7 @@ try{
 	logDebug(err.stack);
 }}
 
-function sepSchedInspectionAppSub(recdType, insGroup, insType, pendSched, asiField, asiValue, daysAhead, calWkgDay, inspName, addtlQuery) {
+function sepSchedInspectionAppSub(recdType, sInsGroup, sInsType, pendSched, asiField, asiValue, daysAhead, calWkgDay, inspName, addtlQuery) {
 try{
 	var appMatch = true;
 	var recdTypeArr = "" + recdType
@@ -266,16 +266,16 @@ try{
 			if(matches(custFld,"",null,"undefined") || custVal==AInfo[custFld]){
 				var pendOrSched = ""+pendSched;
 				if(pendOrSched.toUpperCase()=="PENDING"){
-					createPendingInspection(insGroup,insType);
+					createPendingInspection(sInsGroup,sInsType);
 				}else{
 					if(calWkgDay.toUpperCase()=="WORKING"){
 						var dtSched = dateAdd(sysDate,daysAhead,true);
 					}else{
 						var dtSched = dateAdd(sysDate,daysAhead);
 					}
-					scheduleInspectDate(insType,dtSched);
+					scheduleInspectDate(sInsType,dtSched);
 					if(!matches(inspName,"",null,"undefined")){
-						var inspId = getScheduledInspId(insType);
+						var inspId = getScheduledInspId(sInsType);
 						inspName = ""+inspName;
 						if(inspName.toUpperCase()=="AUTO"){
 							autoAssignInspection(inspId);
@@ -292,7 +292,7 @@ try{
 	logDebug(err.stack);
 }}
 
-function sepSchedInspectionWkfl(recdType, taskName, taskStatus, insGroup, insType, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, inspectorId, addtlQuery) {
+function sepSchedInspectionWkfl(recdType, taskName, taskStatus, sInsGroup, sInsType, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, inspectorId, addtlQuery) {
 try{
 	var appMatch = true;
 	var recdTypeArr = "" + recdType
@@ -318,7 +318,7 @@ try{
 			if(matches(custFld,"",null,"undefined") || custVal==AInfo[custFld]){
 				var pendOrSched = ""+pendSched;
 				if(pendOrSched.toUpperCase()=="PENDING"){
-					createPendingInspection(insGroup,insType);
+					createPendingInspection(sInsGroup,sInsType);
 				}else{
 					if(monthDays.toUpperCase()=="MONTHS"){
 						var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
@@ -329,15 +329,15 @@ try{
 							var dtSched = dateAdd(sysDate,parseInt(whenSched));
 						}
 					}
-					scheduleInspectDate(insType,dtSched);
+					scheduleInspectDate(sInsType,dtSched);
 					if(!matches(inspectorId,"",null,"undefined")){
-						var inspId = getScheduledInspId(insType);
+						var inspId = getScheduledInspId(sInsType);
 						inspId = ""+inspId;
 						if(inspectorId.toUpperCase()=="AUTO"){
 							autoAssignInspection(inspId);
 						}else{
 							if(inspectorId.toUpperCase()=="PRIOR"){
-								var lastInspid = ""+getLastInspector(insType);
+								var lastInspid = ""+getLastInspector(sInsType);
 								if(lastInspid!=null){
 									assignInspection(inspId, lastInspid);
 								}else{
@@ -355,7 +355,7 @@ try{
 	logDebug(err.stack);
 }}
 
-function sepReSchedInspection(recdType, insGroup, insType, inspResult, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, insNewGroup, insNewType, inspectorId, asiDateName, chklstDateName, chklstDateItem, chklstDateGroup, chklstDateSubGroup, chklstDateFieldName, addtlQuery) {
+function sepReSchedInspection(recdType, ssInsGroup, sInsType, sInsResult, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, insNewGroup, insNewType, inspectorId, asiDateName, chklstDateName, chklstDateItem, chklstDateGroup, chklstDateSubGroup, chklstDateFieldName, addtlQuery) {
 try{
 	var appMatch = true;
 	var recdTypeArr = "" + recdType
@@ -374,7 +374,7 @@ try{
 		logDebug("appMatch");
 		var chkFilter = ""+addtlQuery;
 		logDebug("Additional Query field: " + addtlQuery);
-		if (chkFilter.length==0 ||eval(chkFilter) && checkInspectionResult(insType,inspResult) ) {
+		if ((chkFilter.length==0 ||eval(chkFilter)) && inspType==sInsType && inspResult==sInsResult) {
 			if(insNewGroup){
 				var cFld = ""+asiField;
 				var custFld = cFld.trim();
@@ -437,7 +437,7 @@ try{
 									autoAssignInspection(newInspId);
 								}else{
 									if(inspectorId.toUpperCase()=="PRIOR"){
-										var lastInspid = ""+getLastInspector(insType);
+										var lastInspid = ""+getLastInspector(sInsType);
 										if(lastInspid!=null){
 											assignInspection(newInspId, lastInspid);
 										}else{
@@ -1270,11 +1270,11 @@ try{
 													var pendSched = ""+sepRules[row]["Pending/Schedule"];
 													var whenSched = ""+sepRules[row]["When to Schedule"];
 													var calWkgDay = ""+sepRules[row]["Calendar/Work Days"];
-													var insGroup = ""+sepRules[row]["Inspection Group"];
-													var insType = ""+sepRules[row]["Inspection Type"];
+													var sInsGroup = ""+sepRules[row]["Inspection Group"];
+													var sInsType = ""+sepRules[row]["Inspection Type"];
 													var inspectorId = ""+sepRules[row]["Inspector"];
 													if(pendSched.toUpperCase()=="PENDING"){
-														createPendingInspection(insGroup,insType,parCapId);
+														createPendingInspection(sInsGroup,sInsType,parCapId);
 													}else{
 														if(monthDays.toUpperCase()=="MONTHS"){
 															var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
@@ -1287,15 +1287,15 @@ try{
 														}
 														var currCapId = capId;
 														capId = parCapId;
-														scheduleInspectDate(insType,dtSched);
+														scheduleInspectDate(sInsType,dtSched);
 														if(!matches(inspectorId,"",null,"undefined")){
-															var inspId = getScheduledInspId(insType);
+															var inspId = getScheduledInspId(sInsType);
 															inspId = ""+inspId;
 															if(inspectorId.toUpperCase()=="AUTO"){
 																autoAssignInspection(inspId);
 															}else{
 																if(inspectorId.toUpperCase()=="PRIOR"){
-																	var lastInspid = ""+getLastInspector(insType);
+																	var lastInspid = ""+getLastInspector(sInsType);
 																	if(lastInspid!=null){
 																		assignInspection(inspId, lastInspid);
 																	}else{
@@ -1316,7 +1316,8 @@ try{
 									logDebug("sepIssueLicenseWorkflow: No app match: " + recdTypeArr);
 								}
 							}else{
-								logDebug("sepIssueLicenseWorkflow: no task/status match: " + taskName + "/" + taskStatus);
+								//logDebug("sepIssueLicenseWorkflow: no task/status match: " + taskName + "/" + taskStatus);
+								
 							}
 						}
 					}
