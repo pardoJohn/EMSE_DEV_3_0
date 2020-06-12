@@ -1306,7 +1306,7 @@ try{
 																}
 															}
 														}
-														capId = parCapId;
+														capId = currCapId;
 													}
 												}
 											}
