@@ -971,7 +971,7 @@ try{
 												var arrChildren = getChildren(arrThisChild[0]);
 												var status2Chk = ""+arrThisChild[1];
 												if(status2Chk.toUpperCase()=="ANY"){
-													canProceed =- true;
+													canProceed = true;
 												}else{
 													var badStatus=false;
 													for(st in arrChildren){
@@ -991,14 +991,10 @@ try{
 										if(!canProceed){
 											cancel=true;
 											showMessage=true;
-											comment( taskName  + " cannot be set to '" + taskStatus + "' when either there is no child record of the type " );
-											if(feesDue.length==0){
-												comment("--All Fees--");
-											}else{
-												for( x in feesDue){
-													comment(feesDue[x]);
-												}
-											}
+											/*
+											comment( taskName  + " cannot be set to '" + taskStatus + "' when either there is no child record of the type(s) " );
+											*/
+											comment(sepRules[row]["Comment/Description"]);
 										}
 										break;
 									case "Custom Fields":
@@ -1040,10 +1036,13 @@ try{
 										if(!canProceed){
 											cancel=true;
 											showMessage=true;
+											/*
 											comment( taskName  + " cannot be set to '" + taskStatus + "' when these custom fields do not pass these rules: " );
 											for( x in asiBad){
 												comment("---" + asiBad[x]);
 											}
+											*/
+											comment(sepRules[row]["Comment/Description"]);
 										}
 										break;
 									}
