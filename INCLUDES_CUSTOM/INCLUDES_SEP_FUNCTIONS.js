@@ -175,17 +175,17 @@ try{
 					var arrType = cntType.split(",");
 					for(con in arrType){
 						var priContact = getContactObj(capId,arrType[con]);
-						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel);
 					}
 				}else{
 					if(cntType.toUpperCase()=="ALL"){
 						var arrType = getContactObjs(capId);
 						for(con in arrType){
-							sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail);
+							sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, respectPriChannel);
 						}
 					}else{
 						var priContact = getContactObj(capId,cntType);
-						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel);
 					}						
 				}						
 			}
@@ -220,17 +220,17 @@ try{
 				var arrType = cntType.split(",");
 				for(con in arrType){
 					var priContact = getContactObj(capId,arrType[con]);
-					sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+					sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail,respectPriChannel);
 				}
 			}else{
 				if(cntType.toUpperCase()=="ALL"){
 					var arrType = getContactObjs(capId);
 					for(con in arrType){
-						sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail);
+						sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, respectPriChannel);
 					}
 				}else{
 					var priContact = getContactObj(capId,cntType);
-					sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+					sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel);
 				}						
 			}						
 		}
@@ -460,7 +460,7 @@ try{
 }}
 
 
-function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail){
+function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel){
 try{
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
@@ -1251,17 +1251,17 @@ try{
 														var arrType = cntType.split(",");
 														for(con in arrType){
 															var priContact = getContactObj(capId,arrType[con]);
-															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
 														}
 													}else{
 														if(cntType.toUpperCase()=="ALL"){
 															var arrType = getContactObjs(capId);
 															for(con in arrType){
-																sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail);
+																sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, "N");
 															}
 														}else{
 															var priContact = getContactObj(capId,cntType);
-															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail);
+															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
 														}						
 													}						
 												}else{
