@@ -273,7 +273,7 @@ try{
 					}else{
 						var dtSched = dateAdd(sysDate,daysAhead);
 					}
-					scheduleInspectDate(sInsType,dtSched);
+					sepScheduleInspectDate(sInsType,dtSched);
 					if(!matches(inspName,"",null,"undefined")){
 						var inspId = getScheduledInspId(sInsType);
 						inspName = ""+inspName;
@@ -329,7 +329,7 @@ try{
 							var dtSched = dateAdd(sysDate,parseInt(whenSched));
 						}
 					}
-					scheduleInspectDate(sInsType,dtSched);
+					sepScheduleInspectDate(sInsType,dtSched);
 					if(!matches(inspectorId,"",null,"undefined")){
 						var inspId = getScheduledInspId(sInsType);
 						inspId = ""+inspId;
@@ -430,7 +430,7 @@ try{
 								}
 							}
 							logDebug("dtSched: " + dtSched);
-							scheduleInspectDate(insNewType,dtSched);
+							sepScheduleInspectDate(insNewType,dtSched);
 							if(!matches(inspectorId,"",null,"undefined")){
 								var newInspId = getScheduledInspId(insNewType);
 								newInspId = ""+newInspId;
@@ -1288,7 +1288,7 @@ try{
 														}
 														var currCapId = capId;
 														capId = parCapId;
-														scheduleInspectDate(sInsType,dtSched);
+														sepScheduleInspectDate(sInsType,dtSched);
 														if(!matches(inspectorId,"",null,"undefined")){
 															var inspId = getScheduledInspId(sInsType);
 															inspId = ""+inspId;
@@ -1508,5 +1508,44 @@ try{
 	logDebug("A JavaScript Error occurred: getGuidesheetASIValue: " + err.message);
 	logDebug(err.stack);
 }}
+
+function sepScheduleInspectDate(iType,DateToSched){ // optional inspector ID.
+// DQ - Added Optional 4th parameter inspTime Valid format is HH12:MIAM or AM (SR5110)
+// DQ - Added Optional 5th parameter inspComm
+try{
+	var inspectorObj = null;
+	var inspTime = null;
+	var inspComm = "Scheduled via Script";
+	if (arguments.length >= 3)
+		if (arguments[2] != null)
+			{
+			var inspRes = aa.person.getUser(arguments[2]);
+			if (inspRes.getSuccess())
+				inspectorObj = inspRes.getOutput();
+			}
+
+        if (arguments.length >= 4)
+            if(arguments[3] != null)
+		        inspTime = arguments[3];
+
+		if (arguments.length >= 5)
+		    if(arguments[4] != null)
+		        inspComm = arguments[4];
+
+	var schedRes = aa.inspection.scheduleInspection(capId, inspectorObj, aa.date.parseDate(DateToSched), inspTime, iType, inspComm)
+
+	if (schedRes.getSuccess())
+		logDebug("Successfully scheduled inspection : " + iType + " for " + DateToSched);
+	else{
+		if(schedRes.getErrorMessage()=="Can't get the Service Provider Code from the I18NModel."){
+			logDebug("Ignoring I18NMODEL error. Successfully scheduled inspection : " + iType + " for " + DateToSched);
+			logDebug( "**ERROR: adding scheduling inspection (" + iType + "): " + schedRes.getErrorMessage());
+		}
+	}
+}catch(err){
+	logDebug("A JavaScript Error occurred: sepScheduleInspectDate: " + err.message);
+	logDebug(err.stack);
+}}
+ 
 
 //INCLUDES_SEP_CUSTOM END
