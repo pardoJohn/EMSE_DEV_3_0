@@ -1539,6 +1539,7 @@ try{
 	else{
 		if(schedRes.getErrorMessage()=="Can't get the Service Provider Code from the I18NModel."){
 			logDebug("Ignoring I18NMODEL error. Successfully scheduled inspection : " + iType + " for " + DateToSched);
+		}else{
 			logDebug( "**ERROR: adding scheduling inspection (" + iType + "): " + schedRes.getErrorMessage());
 		}
 	}
