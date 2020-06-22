@@ -821,6 +821,7 @@ function sepStopWorkflow(){
 //stop workflow progress based on parameters
 try{
 	//see if any records are set up--module can be specific or "ALL", look for both
+	var workflowStopped = false;
 	var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", appTypeArray[0]);
 	if(sepScriptConfig.getSuccess()){
 		var sepScriptConfigArr = sepScriptConfig.getOutput();
@@ -862,6 +863,7 @@ try{
 									logDebug("Additional Query field: " + addtlQuery);
 									var chkFilter = ""+addtlQuery;
 									if (chkFilter.length > 0 && !eval(chkFilter) ) {
+										workflowStopped = true;
 										cancel=true;
 										showMessage=true;
 										comment( "'"+ chkFilter + "' must resolve to 'true' before proceeding." );
@@ -883,6 +885,7 @@ try{
 											feeBal = sepFeeBalance();
 										}
 										if(feeBal>0){
+											workflowStopped = true;
 											cancel=true;
 											showMessage=true;
 											comment( taskName + " cannot be set to '" + taskStatus + "' when there is an outstanding balance ($" + feeBal.toFixed(2) + ") of these fees: " );
@@ -913,6 +916,7 @@ try{
 											}
 										}
 										if(inspScheduled){
+											workflowStopped = true;
 											cancel=true;
 											showMessage=true;
 											comment( taskName + " cannot be set to '" + taskStatus + "' when these inspections are scheduled or pending: " );
@@ -952,6 +956,7 @@ try{
 											}
 										}
 										if(retArray.length>0){
+											workflowStopped = true;
 											cancel=true;
 											showMessage=true;
 											comment("'"+ taskName + " cannot be set to '" + taskStatus + "' when these documents are required: ");
@@ -989,6 +994,7 @@ try{
 											canProceed=false;
 										}
 										if(!canProceed){
+											workflowStopped = true;
 											cancel=true;
 											showMessage=true;
 											/*
@@ -1034,6 +1040,7 @@ try{
 											comment("The 'Required Elements List' is empty. No custom field comparisons are being made.");
 										}
 										if(!canProceed){
+											workflowStopped = true;
 											cancel=true;
 											showMessage=true;
 											/*
@@ -1054,6 +1061,7 @@ try{
 			}
 		}
 	}
+	return workflowStopped;
 }catch(err){
 	logDebug("A JavaScript Error occurred: sepStopWorkflow: " + err.message);
 	logDebug(err.stack)
