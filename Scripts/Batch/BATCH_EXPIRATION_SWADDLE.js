@@ -35,7 +35,7 @@ debug="";
 currentUserID="ADMIN";
 
 eval(getScriptText("INCLUDES_ACCELA_FUNCTIONS"));
-eval(getScriptText("INCLUDES_BATCH"));
+//eval(getScriptText("INCLUDES_BATCH"));
 eval(getScriptText("INCLUDES_CUSTOM"));
 
 override = "function logDebug(dstr){ if(showDebug) { aa.print(dstr); emailText+= dstr + \"<br>\"; } }";
@@ -61,10 +61,10 @@ function getMasterScriptText(vScriptName) {
 | Start: BATCH PARAMETERS
 |
 /------------------------------------------------------------------------------------------------------*/
-/* test params*/
+/* test params
 aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
-
+*/
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
 if (batchJobResult.getSuccess())
