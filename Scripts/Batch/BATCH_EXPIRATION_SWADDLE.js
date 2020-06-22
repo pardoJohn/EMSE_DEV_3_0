@@ -34,9 +34,9 @@ wfObjArray = null;
 debug="";
 currentUserID="ADMIN";
 
-eval(getScriptText("INCLUDES_ACCELA_FUNCTIONS"));
+eval(getMasterScriptText("INCLUDES_ACCELA_FUNCTIONS"));
 //eval(getScriptText("INCLUDES_BATCH"));
-eval(getScriptText("INCLUDES_CUSTOM"));
+eval(getMasterScriptText("INCLUDES_CUSTOM"));
 
 override = "function logDebug(dstr){ if(showDebug) { aa.print(dstr); emailText+= dstr + \"<br>\"; } }";
 eval(override);
