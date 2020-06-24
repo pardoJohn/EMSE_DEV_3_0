@@ -464,7 +464,7 @@ try{
 						}
 					}
 					// execute custom expression
-					if (actionExpression.length > 0) {
+					if (!matches(actionExpression, "", null, "undefined")) {
 						logDebug("Executing action expression : " + actionExpression);
 						var result = eval(actionExpression);
 					}
