@@ -467,6 +467,7 @@ try{
 					if (!matches(actionExpression, "", null, "undefined")) {
 						logDebug("Executing action expression : " + actionExpression);
 						var result = eval(actionExpression);
+						logDebug("result: " + result);
 					}
 				}
 			}
