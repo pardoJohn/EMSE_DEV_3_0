@@ -355,7 +355,7 @@ try{
 	logDebug(err.stack);
 }}
 
-function sepReSchedInspection(recdType, ssInsGroup, sInsType, sInsResult, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, insNewGroup, insNewType, inspectorId, asiDateName, chklstDateName, chklstDateItem, chklstDateGroup, chklstDateSubGroup, chklstDateFieldName, addtlQuery) {
+function sepReSchedInspection(recdType, ssInsGroup, sInsType, sInsResult, pendSched, asiField, asiValue, monthDays, whenSched, calWkgDay, insNewGroup, insNewType, inspectorId, asiDateName, chklstDateName, chklstDateItem, chklstDateGroup, chklstDateSubGroup, chklstDateFieldName, addtlQuery, actionExpression) {
 try{
 	var appMatch = true;
 	var recdTypeArr = "" + recdType
@@ -385,6 +385,7 @@ try{
 					if(pendOrSched.toUpperCase()=="PENDING"){
 						createPendingInspection(insNewGroup,insNewType);
 					}else{
+						var dtSchedDays = false;
 						var cdFld = ""+asiDateName;
 						if(!matches(cdFld,"",null,"undefined")){
 							var custDtFld = cdFld.trim();
@@ -410,6 +411,7 @@ try{
 								var dtSchedDays = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
 								if(dtSchedDays){
 									var dtSched = dateAdd(sysDate,parseInt(dtSchedDays));
+									//logDebug("GUIDE: " + dtSched);
 								}
 							}else{
 								var pendOrSched = ""+pendSched;
@@ -417,19 +419,30 @@ try{
 									createPendingInspection(insNewGroup,insNewType);
 								}else{
 									monthDays = ""+monthDays;
-									if(monthDays.toUpperCase()=="MONTHS"){
-										var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
+									if(monthDays.toUpperCase()=="YEARS"){
+										//logDebug("YEARS: " + dtSched);
+										var dtSched = dateAddMonths(sysDate,parseInt(whenSched)*12);
 									}else{
-										calWkgDay = ""+calWkgDay;
-										if(calWkgDay.toUpperCase()=="WORKING"){
-											var dtSched = dateAdd(sysDate,parseInt(whenSched),true);
+										if(monthDays.toUpperCase()=="MONTHS"){
+											//logDebug("MONTHS: " + dtSched);
+											var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
 										}else{
-											var dtSched = dateAdd(sysDate,parseInt(whenSched));
+											calWkgDay = ""+calWkgDay;
+											if(calWkgDay.toUpperCase()=="WORKING"){
+												var dtSched = dateAdd(sysDate,parseInt(whenSched),true);
+											}else{
+												var dtSched = dateAdd(sysDate,parseInt(whenSched));
+												//logDebug("WORKING: " + dtSched);
+											}
 										}
 									}
 								}
 							}
 							logDebug("dtSched: " + dtSched);
+							if(!dtSched){
+								logDebug("No scheduled date was found. Defaulting to one month");
+								dtSched=dateAddMonths(null,1);
+							}
 							sepScheduleInspectDate(insNewType,dtSched);
 							if(!matches(inspectorId,"",null,"undefined")){
 								var newInspId = getScheduledInspId(insNewType);
@@ -450,6 +463,11 @@ try{
 							}
 						}
 					}
+					// execute custom expression
+					if (actionExpression.length > 0) {
+						logDebug("Executing action expression : " + actionExpression);
+						var result = eval(actionExpression);
+					}
 				}
 			}
 		}
@@ -458,7 +476,6 @@ try{
 	logDebug("An error occurred in sepReSchedInspection: " + err.message);
 	logDebug(err.stack);
 }}
-
 
 function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel){
 try{
