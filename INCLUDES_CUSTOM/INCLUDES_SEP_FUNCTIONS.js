@@ -465,6 +465,7 @@ try{
 					}
 					// execute custom expression
 					if (!matches(actionExpression, "", null, "undefined")) {
+						actionExpression = ''+ actionExpression;
 						logDebug("Executing action expression : " + actionExpression);
 						var result = eval(actionExpression);
 						logDebug("result: " + result);
