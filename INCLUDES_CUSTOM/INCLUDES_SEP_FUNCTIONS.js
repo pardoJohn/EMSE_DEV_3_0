@@ -198,7 +198,7 @@ try{
 
 function sepEmailNotifContactInsp(recdType, contactType, respectPriChannel, notName, rName, inspName, inspStatus, sysFromEmail, addtlQuery) {
 try{
-	if((matches(inspName,null,"","undefined") || inspType==""+inspName) && (inspStatus.toUpperCase()=="ALL" || inspResult == ""+inspStatus){
+	if((matches(inspName,null,"","undefined") || inspType==""+inspName) && (inspStatus.toUpperCase()=="ALL" || inspResult == ""+inspStatus)){
 		var appMatch = true;
 		var recdTypeArr = "" + recdType
 		var arrAppType = recdTypeArr.split("/");
@@ -239,7 +239,7 @@ try{
 		}
 	}
 }catch(err){
-	logDebug("An error occurred in sepEmailNotifContactWkfl: " + err.message);
+	logDebug("An error occurred in sepEmailNotifContactInsp: " + err.message);
 	logDebug(err.stack);
 }}
 
