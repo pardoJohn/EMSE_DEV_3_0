@@ -196,6 +196,55 @@ try{
 	logDebug(err.stack);
 }}
 
+function sepEmailNotifContactInsp(recdType, contactType, respectPriChannel, notName, rName, inspName, inspStatus, sysFromEmail, addtlQuery) {
+try{
+	if((matches(inspName,null,"","undefined") || inspType==""+inspName) && (inspStatus.toUpperCase()=="ALL" || inspResult == ""+inspStatus){
+		var appMatch = true;
+		var recdTypeArr = "" + recdType
+		var arrAppType = recdTypeArr.split("/");
+		if (arrAppType.length != 4){
+			logDebug("The record type is incorrectly formatted: " + recdType);
+			return false;
+		}else{
+			for (xx in arrAppType){
+				if (!arrAppType[xx].equals(appTypeArray[xx]) && !arrAppType[xx].equals("*")){
+					appMatch = false;
+				}
+			}
+		}
+		if (appMatch){
+			var chkFilter = ""+addtlQuery;
+			logDebug("Additional Query field: " + addtlQuery);
+			if (chkFilter.length==0 ||eval(chkFilter) ) {
+				var cntType = ""+contactType;
+				logDebug("cntType: " + cntType);
+				if(cntType.indexOf(",")>-1){
+					var arrType = cntType.split(",");
+					for(con in arrType){
+						var priContact = getContactObj(capId,arrType[con]);
+						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel);
+					}
+				}else{
+					if(cntType.toUpperCase()=="ALL"){
+						var arrType = getContactObjs(capId);
+						for(con in arrType){
+							sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, respectPriChannel);
+						}
+					}else{
+						var priContact = getContactObj(capId,cntType);
+						sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel);
+					}						
+				}						
+			}
+		}
+	}
+}catch(err){
+	logDebug("An error occurred in sepEmailNotifContactWkfl: " + err.message);
+	logDebug(err.stack);
+}}
+
+
+
 function sepEmailNotifContactAppSub(recdType, contactType, respectPriChannel, notName, rName, sysFromEmail, addtlQuery) {
 try{
 	var appMatch = true;
