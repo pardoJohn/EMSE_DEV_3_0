@@ -941,7 +941,7 @@ try{
 										var strFee = ""+ sepRules[row]["Required Elements List"];
 										var feeBal = 0;
 										var feesDue = [];
-										if(strFee.length>0){
+										if(strFee.length>0 && strFee!="ALL"){
 											var arrFee = strFee.split("|");
 											for (fee in arrFee){
 												feeBal += sepFeeBalance(arrFee[fee]);
