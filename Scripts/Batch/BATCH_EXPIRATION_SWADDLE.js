@@ -16,6 +16,7 @@ var emailText = "";
 var errLog = "";
 var debugText = "";
 var showDebug = true;	
+SENDEMAILS = true;	
 var showMessage = false;
 var message = "";
 var maxSeconds = 7 * 60;
@@ -182,8 +183,8 @@ try {
 	arrJobs = findSWADDLERecsToProcess();
 	if(arrJobs){
 		var batchId = getJobParam("BatchJobID"); 
-		var AInfo =[];
-		loadAppSpecific(AInfo);
+		var SEPInfo =[];
+		loadAppSpecific(SEPInfo);
 		for (job in arrJobs){
 			thisJob = arrJobs[job];
 			var isActive = ""+thisJob["Active"];
@@ -238,7 +239,7 @@ try {
 				actionExpression = ""+thisJob["Addtl Action to Perform"]; // JavaScript used to perform custom action, for example:   addStdCondition(...)
 				sendEmailNotifications = ""+thisJob["Send Email Notifications"];
 				sendEmailNotifications = sendEmailNotifications.substring(0, 1).toUpperCase().equals("Yes");
-				sysFromEmail = AInfo["Agency From Email"];
+				sysFromEmail = SEPInfo["Agency From Email"];
 				rptName = ""+thisJob["Report Name"];
 				appType = ""+thisJob["Record Type"];
 				fromDate = dateAdd(null, parseInt(lookAheadDays))
@@ -358,6 +359,8 @@ try{
 		var b1Status = b1Exp.getExpStatus();
 		var renewalCapId = null;
 		capId = aa.cap.getCapID(b1Exp.getCapID().getID1(), b1Exp.getCapID().getID2(), b1Exp.getCapID().getID3()).getOutput();
+		var AInfo =[];
+		loadAppSpecific(AInfo);
 		if (!capId) {
 			logDebug("Could not get a Cap ID for " + b1Exp.getCapID().getID1() + "-" + b1Exp.getCapID().getID2() + "-" + b1Exp.getCapID().getID3());
 			continue;
@@ -397,6 +400,9 @@ try{
 			var result = eval(filterExpression);
 			if (!result) {
 				capFilterExpression++;
+				logDebug("Veterans Exemption: " + AInfo["Veterans Exemption"]);
+				logDebug("Is this Caterer located within Solano County: " + AInfo["Is this Caterer located within Solano County"]);
+				logDebug("Non Profit: " + AInfo["Non Profit"]);
 				logDebug("skipping, due to:  " + filterExpression + " = " + eval(result));
 				continue;
 			}
@@ -510,6 +516,7 @@ try{
 						addParameter(eParams, "$$contactFirstName$$", cLName);
 						addParameter(eParams, "$$location$$", location);
 						var rFiles = [];
+						logDebug("rptName: " + rptName);
 						if(!matches(rptName, null, "", "undefined")){
 							var rFile;
 							var rptParams = aa.util.newHashMap();
@@ -590,7 +597,7 @@ try{
 		}	
 		while (localSetParentWorkflowTaskAndStatus.length > 1) {
 			logDebug("Setting workflow task " + localSetParentWorkflowTaskAndStatus[0] + " to " + localSetParentWorkflowTaskAndStatus[1] );
-			resultWorkflowTask(localSetParentWorkflowTaskAndStatus[0], localSetParentWorkflowTaskAndStatus[1], "Updated by batch job "+ batchJobName + " Job ID " + batchJobID, "");
+			resultWorkflowTask(localSetParentWorkflowTaskAndStatus[0], localSetParentWorkflowTaskAndStatus[1], "Updated by batch job "+ batchJobName + " Job ID " + batchId, "");
 			localSetParentWorkflowTaskAndStatus.splice(0, 2); // pop these off the queue
 		}
 		// lock Parent License
