@@ -1,5 +1,5 @@
 {
-  "EnvHealth/Food Retail/Bakery/Application": {
+  "_EnvHealth/Food Retail/Bakery/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -24,7 +24,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -40,7 +40,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Bar/Application": {
+  "_EnvHealth/Food Retail/Bar/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -65,7 +65,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -81,7 +81,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Cafeteria/Application": {
+  "_EnvHealth/Food Retail/Cafeteria/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -106,7 +106,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -122,7 +122,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Commissary/Application": {
+  "_EnvHealth/Food Retail/Commissary/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -147,7 +147,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -163,7 +163,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Elderly Nutrition Catered/Application": {
+  "_EnvHealth/Food Retail/Elderly Nutrition Catered/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -188,7 +188,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -229,7 +229,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -245,7 +245,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Food Catering/Application": {
+  "_EnvHealth/Food Retail/Food Catering/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -270,7 +270,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -311,7 +311,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -352,7 +352,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -368,7 +368,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Grocery/Application": {
+  "_EnvHealth/Food Retail/Grocery/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -393,7 +393,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -409,7 +409,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Hospital Food/Application": {
+  "_EnvHealth/Food Retail/Hospital Food/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -434,7 +434,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -450,7 +450,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Hotel Food/Application": {
+  "_EnvHealth/Food Retail/Hotel Food/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -475,7 +475,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -491,7 +491,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Limited Food/Application": {
+  "_EnvHealth/Food Retail/Limited Food/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -516,7 +516,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -532,7 +532,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Meat Market/Application": {
+  "_EnvHealth/Food Retail/Meat Market/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -557,7 +557,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -598,7 +598,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -614,7 +614,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Pushcart Food/Application": {
+  "_EnvHealth/Food Retail/Pushcart Food/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -639,7 +639,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -655,7 +655,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Restaurant/Application": {
+  "_EnvHealth/Food Retail/Restaurant/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -680,7 +680,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -696,7 +696,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Shared Kitchen/Application": {
+  "_EnvHealth/Food Retail/Shared Kitchen/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -721,7 +721,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -737,7 +737,7 @@
       }
     ]
   },
-  "EnvHealth/Food Retail/Snack Bar/Application": {
+  "_EnvHealth/Food Retail/Snack Bar/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
@@ -762,7 +762,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -803,7 +803,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -844,7 +844,171 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": In Service",
+          "copyAddress": [
+            "ALL"
+          ],
+          "customFieldsDefaultMapping": {},
+          "linkParent": true,
+          "copyDocumentTypes": [
+            "Site Plan",
+            "Building Plan"
+          ],
+          "copyAppNameToAssetName": true
+        },
+        "postScript": ""
+      }
+    ]
+  }
+  "EnvHealth/Food Retail/Caterer/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Create Vending Machine Asset",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "copyContacts": [
+            "Facility Owner"            
+          ],
+          "updateExistingRefAsset": true,
+          "assetType": "Building",
+          "assetGroup": "Facilities",
+          "checkExistingAsset": true,
+          "dateOfService": "",
+          "status": In Service",
+          "copyAddress": [
+            "ALL"
+          ],
+          "customFieldsDefaultMapping": {},
+          "linkParent": true,
+          "copyDocumentTypes": [
+            "Site Plan",
+            "Building Plan"
+          ],
+          "copyAppNameToAssetName": true
+        },
+        "postScript": ""
+      }
+    ]
+  }
+  "EnvHealth/Food Retail/Restricted Food Service/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Create Vending Machine Asset",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "copyContacts": [
+            "Facility Owner"            
+          ],
+          "updateExistingRefAsset": true,
+          "assetType": "Building",
+          "assetGroup": "Facilities",
+          "checkExistingAsset": true,
+          "dateOfService": "",
+          "status": In Service",
+          "copyAddress": [
+            "ALL"
+          ],
+          "customFieldsDefaultMapping": {},
+          "linkParent": true,
+          "copyDocumentTypes": [
+            "Site Plan",
+            "Building Plan"
+          ],
+          "copyAppNameToAssetName": true
+        },
+        "postScript": ""
+      }
+    ]
+  }
+  "EnvHealth/Food Retail/Temporary Event/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Create Vending Machine Asset",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "copyContacts": [
+            "Facility Owner"            
+          ],
+          "updateExistingRefAsset": true,
+          "assetType": "Building",
+          "assetGroup": "Facilities",
+          "checkExistingAsset": true,
+          "dateOfService": "",
+          "status": In Service",
+          "copyAddress": [
+            "ALL"
+          ],
+          "customFieldsDefaultMapping": {},
+          "linkParent": true,
+          "copyDocumentTypes": [
+            "Site Plan",
+            "Building Plan"
+          ],
+          "copyAppNameToAssetName": true
+        },
+        "postScript": ""
+      }
+    ]
+  }
+  "EnvHealth/Food Retail/Temporary Event Vendor/Application": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Create Vending Machine Asset",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "task": [
+            "Permit Issuance"
+          ],
+          "status": [
+            "Issued"
+          ]
+        },
+        "action": {
+          "copyContacts": [
+            "Facility Owner"            
+          ],
+          "updateExistingRefAsset": true,
+          "assetType": "Building",
+          "assetGroup": "Facilities",
+          "checkExistingAsset": true,
+          "dateOfService": "",
+          "status": In Service",
           "copyAddress": [
             "ALL"
           ],

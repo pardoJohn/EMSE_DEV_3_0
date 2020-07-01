@@ -17,7 +17,7 @@
         },
         "action": {
           "copyContacts": [
-            "Facility Owner"
+            "Applicant"
            
           ],
           "updateExistingRefAsset": true,
@@ -25,7 +25,7 @@
           "assetGroup": "Facilities",
           "checkExistingAsset": true,
           "dateOfService": "",
-          "status": "Pending",
+          "status": "In Service",
           "copyAddress": [
             "ALL"
           ],
@@ -41,7 +41,7 @@
       }
     ]
   },
-  "EnvHealth/Rec Health/Spa/Application": {
+  "_EnvHealth/Rec Health/Spa/Application": {
     "WorkflowTaskUpdateAfter": [
       {
         "metadata": {
