@@ -71,6 +71,7 @@ batchJobName = "" + aa.env.getValue("BatchJobName");
 if (batchJobResult.getSuccess())
   {
   batchJobRes = batchJobResult.getOutput();
+  logDebug("!!!VOTE FOR PEDRO!!!!");
   logDebug("Batch Job " + batchJobName + " Job ID is " + batchJobRes);
   }
 else{
@@ -355,6 +356,7 @@ try{
 		var expDate = b1Exp.getExpDate();
 		if (expDate) {
 			var b1ExpDate = expDate.getMonth() + "/" + expDate.getDayOfMonth() + "/" + expDate.getYear();
+			b1ExpDate = dateAdd(b1ExpDate,1);
 		}
 		var b1Status = b1Exp.getExpStatus();
 		var renewalCapId = null;
@@ -515,6 +517,8 @@ try{
 						addParameter(eParams, "$$contactFirstName$$", cFName);
 						addParameter(eParams, "$$contactFirstName$$", cLName);
 						addParameter(eParams, "$$location$$", location);
+						addParameter(eParams, "$$balanceDue$$", feeBalance());
+						logDebug("feeBalance(): " + feeBalance());
 						var rFiles = [];
 						logDebug("rptName: " + rptName);
 						if(!matches(rptName, null, "", "undefined")){
