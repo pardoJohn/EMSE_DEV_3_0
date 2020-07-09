@@ -429,7 +429,7 @@ try{
 		logDebug("chkFilter: " + chkFilter.length);
 		logDebug("isInspType: " + isInspType);
 		logDebug("ssInsType: " + ssInsType);
-		logDebug("isInspType.toString()==ssInsType.toString(): " + isInspType.toString()==ssInsType.toString());
+		logDebug("isInspType.toString()==ssInsType.toString(): " + isInspType==ssInsType);
 		logDebug("inspResult: " + inspResult);
 		logDebug("sInsResult: " + sInsResult);
 		logDebug("inspResult.toString()==sInsResult.toString(): " + inspResult.toString()==sInsResult.toString());
