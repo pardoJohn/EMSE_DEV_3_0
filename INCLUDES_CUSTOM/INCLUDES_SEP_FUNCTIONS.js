@@ -433,8 +433,7 @@ try{
 		logDebug("inspResult: " + inspResult);
 		logDebug("sInsResult: " + sInsResult);
 		logDebug("inspResult.toString()==sInsResult.toString(): " + (inspResult.toString()==sInsResult.toString()));
-		logDebug("---------------------------------------");
-		if ((chkFilter.length==0 ||eval(chkFilter)) && inspType.toString()==sInsType.toString() && inspResult.toString()==sInsResult.toString()) {
+		if ((chkFilter.length==0 ||eval(chkFilter)) && (inspType.toString()==sInsType.toString()) && (inspResult.toString()==sInsResult.toString())) {
 			if(insNewGroup){
 				var cFld = ""+asiField;
 				var custFld = cFld.trim();
