@@ -422,12 +422,16 @@ try{
 	if (appMatch){
 		logDebug("appMatch");
 		var chkFilter = ""+addtlQuery;
+		logDebug("---------------------------------------");
 		logDebug("Additional Query field: " + addtlQuery);
 		logDebug("chkFilter: " + chkFilter.length);
 		logDebug("inspType: " + inspType);
 		logDebug("sInsType: " + sInsType);
+		logDebug("inspType.toString()==sInsType.toString(): " + inspType.toString()==sInsType.toString());
 		logDebug("inspResult: " + inspResult);
 		logDebug("sInsResult: " + sInsResult);
+		logDebug("inspResult.toString()==sInsResult.toString(): " + inspResult.toString()==sInsResult.toString());
+		logDebug("---------------------------------------");
 		if ((chkFilter.length==0 ||eval(chkFilter)) && inspType.toString()==sInsType.toString() && inspResult.toString()==sInsResult.toString()) {
 			if(insNewGroup){
 				var cFld = ""+asiField;
