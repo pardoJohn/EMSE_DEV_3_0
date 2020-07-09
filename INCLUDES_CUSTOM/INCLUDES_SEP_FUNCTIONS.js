@@ -424,6 +424,7 @@ try{
 		var chkFilter = ""+addtlQuery;
 		var isInspType = ""+inspType;
 		var ssInsType = ""+sInsType;
+		/*
 		logDebug("---------------------------------------");
 		logDebug("Additional Query field: " + addtlQuery);
 		logDebug("chkFilter: " + chkFilter.length);
@@ -434,13 +435,16 @@ try{
 		logDebug("sInsResult: " + sInsResult);
 		logDebug("inspResult.toString()==sInsResult.toString(): " + (inspResult.toString()==sInsResult.toString()));
 		logDebug("insNewGroup: " + insNewGroup);
+		*/
 		if ((chkFilter.length==0 ||eval(chkFilter)) && (inspType.toString()==sInsType.toString()) && (inspResult.toString()==sInsResult.toString())) {
 			if(insNewGroup){
 				var cFld = ""+asiField;
 				var custFld = cFld.trim();
 				var cVal = ""+asiValue;
 				var custVal = cVal.trim();
-				if(matches(custFld,"",null,"undefined") || custVal==AInfo[custFld]){
+				var CInfo = [];
+				loadAppSpecific(CInfo);
+				if(matches(custFld,"",null,"undefined") || custVal==CInfo[custFld]){
 					var pendOrSched = ""+pendSched;
 					if(pendOrSched.toUpperCase()=="PENDING"){
 						createPendingInspection(insNewGroup,insNewType);
@@ -449,7 +453,7 @@ try{
 						var cdFld = ""+asiDateName;
 						if(!matches(cdFld,"",null,"undefined")){
 							var custDtFld = cdFld.trim();
-							dtSched = AInfo[custDtFld];
+							dtSched = CInfo[custDtFld];
 						}else{
 							var cldName = ""+chklstDateName;
 							if(!matches(cldName,"",null,"undefined")){
