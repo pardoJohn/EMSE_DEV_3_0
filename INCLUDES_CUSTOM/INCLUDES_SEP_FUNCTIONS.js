@@ -356,7 +356,7 @@ try{
 			}
 		}
 	}
-	if (appMatch && (!matches(taskName,"",null,"undefined" || wfTask==taskName) && wfStatus==taskStatus)){
+	if (appMatch && (matches(taskName,"",null,"undefined") || wfTask==taskName) && wfStatus==taskStatus){
 		var chkFilter = ""+addtlQuery;
 		logDebug("Additional Query field: " + addtlQuery);
 		if (chkFilter.length==0 ||eval(chkFilter) ) {
@@ -670,7 +670,7 @@ try{
 		if(sepRules[row]["Active"]=="Yes"){
 			var taskName = ""+sepRules[row]["Task Name"];
 			var taskStatus = ""+sepRules[row]["Task Status"];
-			if(!matches(taskName,"",null,"undefined" || wfTask==taskName) && wfStatus==taskStatus){
+			if((matches(taskName,"",null,"undefined") || wfTask==taskName) && wfStatus==taskStatus){
 				var appMatch = true;
 				var recdType = ""+sepRules[row]["Record Type"];
 				var recdTypeArr = "" + recdType;
@@ -1205,7 +1205,7 @@ try{
 						if(sepRules[row]["Active"]=="Yes"){
 							var taskName = ""+sepRules[row]["Task Name"];
 							var taskStatus = ""+sepRules[row]["Task Status"];
-							if(!matches(taskName,"",null,"undefined" || wfTask==taskName) && wfStatus==taskStatus){
+							if((matches(taskName,"",null,"undefined") || wfTask==taskName) && wfStatus==taskStatus){
 								var appMatch = true;
 								var recdType = ""+sepRules[row]["Record Type"];
 								var recdTypeArr = "" + recdType;
