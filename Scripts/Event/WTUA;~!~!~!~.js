@@ -23,7 +23,7 @@ try{
 		}
 	}
 }catch(err){
-	logDebug("A JavaScript Error occurred: ASA:*/*/*/*: Schedule Inspections: " + err.message);
+	logDebug("A JavaScript Error occurred: WTUA:*/*/*/*: Schedule Inspections: " + err.message);
 	logDebug(err.stack)
 }
 
@@ -34,6 +34,14 @@ try{
 	sepIssueLicenseWorkflow();
 }catch(err){
 	logDebug("A JavaScript Error occurred: WTUA:*/*/*/*: Issue license: " + err.message);
+	logDebug(err.stack)
+}
+
+//renew license
+try{
+	sepRenewLicenseWorkflow();
+}catch(err){
+	logDebug("A JavaScript Error occurred: WTUA:*/*/*/*: Renew license: " + err.message);
 	logDebug(err.stack)
 }
 //send notifications--should always be the last script, especially if the notification is based on fees or other logic.
