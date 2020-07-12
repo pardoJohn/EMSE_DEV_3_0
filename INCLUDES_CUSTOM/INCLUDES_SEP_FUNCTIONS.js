@@ -1639,5 +1639,172 @@ try{
 	logDebug(err.stack);
 }}
  
+function sepRenewLicenseWorkflow(){
+try{
+	//see if any records are set up--module can be specific or "ALL", look for both
+	var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", appTypeArray[0]);
+	if(sepScriptConfig.getSuccess()){
+		var sepScriptConfigArr = sepScriptConfig.getOutput();
+		if(sepScriptConfigArr.length<1){
+			var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", "ALL");
+			if(sepScriptConfig.getSuccess()){
+				var sepScriptConfigArr = sepScriptConfig.getOutput();
+			}
+		}
+		if(sepScriptConfigArr.length>0){ 
+			for(sep in sepScriptConfigArr){
+				var cfgCapId = sepScriptConfigArr[sep].getCapID();
+				var sepRules = loadASITable("LICENSE RENEWAL - ON WORKFLOW",cfgCapId);
+				var sysFromEmail = getAppSpecific("Agency From Email",cfgCapId);
+				if(sepRules.length>0){
+					for(row in sepRules){
+						if(sepRules[row]["Active"]=="Yes"){
+							var taskName = ""+sepRules[row]["Task Name"];
+							var taskStatus = ""+sepRules[row]["Task Status"];
+							var fndTaskStatus =false;
+							if(taskStatus.indexOf(",")>-1){
+								var arrTaskStatus = taskStatus.split(",");
+								if(exists(wfStatus,taskStatus)){
+									fndTaskStatus = true;
+								}
+							}else{
+								logDebug("here");
+								if(wfStatus==taskStatus){
+									fndTaskStatus = true;
+								}
+							}
+							logDebug("fndTaskStatus: " + fndTaskStatus);
+							if((!matches(taskName,"",null,"undefined") || wfTask==taskName) && fndTaskStatus){
+								logDebug("here");
+								var appMatch = true;
+								var recdType = ""+sepRules[row]["Record Type"];
+								var recdTypeArr = "" + recdType;
+								var arrAppType = recdTypeArr.split("/");
+								if (arrAppType.length != 4){
+									logDebug("The record type is incorrectly formatted: " + recdType);
+									return false;
+								}else{
+									for (xx in arrAppType){
+										if (!arrAppType[xx].equals(appTypeArray[xx]) && !arrAppType[xx].equals("*")){
+											appMatch = false;
+										}
+									}
+								}
+								if (appMatch){
+									var currCapId = capId;
+									var addtlQuery = ""+sepRules[row]["Additional Query"];
+									logDebug("Additional Query field: " + addtlQuery);
+									var chkFilter = ""+addtlQuery;
+									if (chkFilter.length==0 ||eval(chkFilter) ) {
+										logDebug("eval(chkFilter): " + eval(chkFilter));
+										if(!matches(sepRules[row]["Parent Record Type"], "",null,"undefined")){
+											var updParentRecd = ""+sepRules[row]["Update Parent Record"].substring(0, 1).toUpperCase().equals("Y");
+											if(updParentRecd){
+												var parCapId = getParentCapID4Renewal();
+												if(!parCapId){
+													var parCapId = getParent();
+												}
+											}
+											if(!parCapId){
+												logDebug("Not processing due to no parent record being found.");
+												continue;
+											}else{
+												capId = parCapId;
+											}
+										}
+										var yrsMosDays = ""+sepRules[row]["Years/Months/Days"];
+										if(!matches(yrsMosDays,"",null,"undefined")){
+											var expDateYear = sysDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
+											var expDate = dateFormatted(sysDate.getMonth(), sysDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
+											var expDate = parseFloat(sepRules[row]["When to Expire"]);
+											if(yrsMosDays.toUpperCase()=="YEARS"){
+												var dtSched = dateAddMonths(sysDate,parseInt(expDate)*12);
+											}else{
+												if(yrsMosDays.toUpperCase()=="MONTHS"){
+													var dtSched = dateAdd(sysDate,parseInt(expDate));
+												}else{
+													var dtSched = dateAdd(sysDate,parseInt(expDate));
+												}
+											}
+										}else{
+											logDebug("Need to pick among years, months, and days");
+										}
+										if(matches(""+sepRules[row]["New App Status"],"",null,"undefined")){
+											var newAppStatus = "Active";
+										}else{
+											var newAppStatus = ""+sepRules[row]["New App Status"];
+										}
+										licEditExpInfo(newAppStatus, dtSched);
+										updateAppStatus(newAppStatus, "Updated via sepRenewLicenseWorkflow.");
+										if(""+sepRules[row]["Copy Custom Fields/Lists"]=="ALL"){
+											copyAppSpecific(parCapId);
+											copyASITables(capId, parCapId);
+											logDebug("Copied all ASI/T.");
+										}else{
+											if(!matches(""+sepRules[row]["Copy Custom Fields/Lists"],"",null,"undefined")){
+												var copyList = ""+sepRules[row]["Copy Custom Fields/Lists"];
+												var arrCopy = [];
+												if(copyList.indexOf("|")>-1){
+													arrCopy = copyList.split("|");
+												}else{
+													arrCopy.push(copyList);
+												}
+												copyAppSpecificInclude(parCapId,arrCopy);
+												copyASITablesInclude(capId, parCapId,arrCopy);
+											}
+										}
+										var notName = "" + sepRules[row]["Notification Name"];
+										var rName = "" + sepRules[row]["Report Name"];
+										if(!matches(notName, "","undefined",null)){
+											var cntType = ""+sepRules[row]["Contacts Receiving Notice"];
+											if(cntType.indexOf(",")>-1){
+												var arrType = cntType.split(",");
+												for(con in arrType){
+													var priContact = getContactObj(capId,arrType[con]);
+													sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
+												}
+											}else{
+												if(cntType.toUpperCase()=="ALL"){
+													var arrType = getContactObjs(capId);
+													for(con in arrType){
+														sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, "N");
+													}
+												}else{
+													var priContact = getContactObj(capId,cntType);
+													sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
+												}						
+											}						
+										}else{
+											logDebug("No notification name. No email sent.");
+										}
+										var actionExpression = ""+sepRules["Addtl Action to Perform"]; 
+										// execute custom expression
+										if (actionExpression.length > 0) {
+											feeSeqList = [];
+											paymentPeriodList = [];
+											logDebug("Executing action expression : " + actionExpression);
+											var result = eval(actionExpression);
+										}
+									}else{
+										logDebug("sepRenewLicenseWorkflow: Check filter resolved to false: " + chkFilter);
+									}
+									capId = currCapId;
+								}else{
+									logDebug("sepRenewLicenseWorkflow: No app match: " + recdTypeArr);
+								}
+							}else{
+								//logDebug("sepRenewLicenseWorkflow: no task/status match: " + taskName + "/" + taskStatus);
+								
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}catch(err){
+	logDebug("A JavaScript Error occurred: sepRenewLicenseWorkflow:  " + err.message);
+	logDebug(err.stack)
+}}
 
 //INCLUDES_SEP_CUSTOM END
