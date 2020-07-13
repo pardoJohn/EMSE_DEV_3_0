@@ -62,10 +62,9 @@ function getMasterScriptText(vScriptName) {
 | Start: BATCH PARAMETERS
 |
 /------------------------------------------------------------------------------------------------------*/
-/* test params 
+/* test params */
 aa.env.setValue("ModuleName", "EnvHealth");
-aa.env.setValue("BatchJobID", "ALL_BATCHES");
-*/
+aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit");
 
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
@@ -187,6 +186,10 @@ try {
 		var batchId = getJobParam("BatchJobID"); 
 		var SEPInfo =[];
 		loadAppSpecific(SEPInfo);
+		var fromDate = "";
+		var toDate = "";
+		var expStatus = "";
+
 		for (job in arrJobs){
 			thisJob = arrJobs[job];
 			var isActive = ""+thisJob["Active"];
@@ -410,9 +413,9 @@ try{
 			var result = eval(filterExpression);
 			if (!result) {
 				capFilterExpression++;
-				logDebug("Veterans Exemption: " + AInfo["Veterans Exemption"]);
-				logDebug("Is this Caterer located within Solano County: " + AInfo["Is this Caterer located within Solano County"]);
-				logDebug("Non Profit: " + AInfo["Non Profit"]);
+				//logDebug("Veterans Exemption: " + AInfo["Veterans Exemption"]);
+				//logDebug("Is this Caterer located within Solano County: " + AInfo["Is this Caterer located within Solano County"]);
+				//logDebug("Non Profit: " + AInfo["Non Profit"]);
 				logDebug("skipping, due to:  " + filterExpression + " = " + eval(result));
 				continue;
 			}
@@ -636,7 +639,7 @@ try{
 		}
 		// execute custom expression
 		if (actionExpression.length > 0) {
-			feeSeqList = [];
+			feeSeqList = []; 
 			paymentPeriodList = [];
 			logDebug("Executing action expression : " + actionExpression);
 			var result = eval(actionExpression);
