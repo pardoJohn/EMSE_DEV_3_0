@@ -62,17 +62,18 @@ function getMasterScriptText(vScriptName) {
 | Start: BATCH PARAMETERS
 |
 /------------------------------------------------------------------------------------------------------*/
-/* test params 
+/* test params
 aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit");
-*/
+aa.env.setValue("BatchJobID", "ALL_BATCHES");
+ */
 
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
 if (batchJobResult.getSuccess())
   {
   batchJobRes = batchJobResult.getOutput();
-  logDebug("!!!VOTE FOR PEDRO SECOND UPDATE!!!!");
+  logDebug("!!!VOTE FOR PEDRO THIRD UPDATE!!!!");
   logDebug("Batch Job " + batchJobName + " Job ID is " + batchJobRes);
   }
 else{
