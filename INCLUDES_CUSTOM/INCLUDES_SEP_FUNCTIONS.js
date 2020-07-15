@@ -1731,16 +1731,24 @@ try{
 										}
 										var yrsMosDays = ""+sepRules[row]["Years/Months/Days"];
 										if(!matches(yrsMosDays,"",null,"undefined")){
-											var expDateYear = sysDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
-											var expDate = dateFormatted(sysDate.getMonth(), sysDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
-											var expDate = parseFloat(sepRules[row]["When to Expire"]);
-											if(yrsMosDays.toUpperCase()=="YEARS"){
-												var dtSched = dateAddMonths(sysDate,parseInt(expDate)*12);
-											}else{
-												if(yrsMosDays.toUpperCase()=="MONTHS"){
-													var dtSched = dateAdd(sysDate,parseInt(expDate));
+											var b1ExpResult = aa.expiration.getLicensesByCapID(capId)
+											if (b1ExpResult.getSuccess()){
+												var b1Exp = b1ExpResult.getOutput();
+												var tmpDate = b1Exp.getExpDate();
+												var expDateYear = tmpDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
+												var expDate = dateFormatted(tmpDate.getMonth(), tmpDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
+												var expDate = parseFloat(sepRules[row]["When to Expire"]);
+												if(yrsMosDays.toUpperCase()=="YEARS"){
+													var dtSched = dateAddMonths(tmpDate,parseInt(expDate)*12);
+													dtSched = dateAdd(dtSched,1);
 												}else{
-													var dtSched = dateAdd(sysDate,parseInt(expDate));
+													if(yrsMosDays.toUpperCase()=="MONTHS"){
+														var dtSched = dateAdd(tmpDate,parseInt(expDate));
+														dtSched = dateAdd(dtSched,1);
+													}else{
+														var dtSched = dateAdd(tmpDate,parseInt(expDate));
+														dtSched = dateAdd(dtSched,1);
+													}
 												}
 											}
 										}else{
@@ -1895,17 +1903,20 @@ try{
 											if (b1ExpResult.getSuccess()){
 												var b1Exp = b1ExpResult.getOutput();
 												var tmpDate = b1Exp.getExpDate();
-											}
-											var expDateYear = tmpDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
-											var expDate = dateFormatted(tmpDate.getMonth(), tmpDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
-											var expDate = parseFloat(sepRules[row]["When to Expire"]);
-											if(yrsMosDays.toUpperCase()=="YEARS"){
-												var dtSched = dateAddMonths(tmpDate,parseInt(expDate)*12);
-											}else{
-												if(yrsMosDays.toUpperCase()=="MONTHS"){
-													var dtSched = dateAdd(tmpDate,parseInt(expDate));
+												var expDateYear = tmpDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
+												var expDate = dateFormatted(tmpDate.getMonth(), tmpDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
+												var expDate = parseFloat(sepRules[row]["When to Expire"]);
+												if(yrsMosDays.toUpperCase()=="YEARS"){
+													var dtSched = dateAddMonths(tmpDate,parseInt(expDate)*12);
+													dtSched = dateAdd(dtSched,1);
 												}else{
-													var dtSched = dateAdd(tmpDate,parseInt(expDate));
+													if(yrsMosDays.toUpperCase()=="MONTHS"){
+														var dtSched = dateAdd(tmpDate,parseInt(expDate));
+														dtSched = dateAdd(dtSched,1);
+													}else{
+														var dtSched = dateAdd(tmpDate,parseInt(expDate));
+														dtSched = dateAdd(dtSched,1);
+													}
 												}
 											}
 										}else{
