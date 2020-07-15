@@ -64,7 +64,7 @@ function getMasterScriptText(vScriptName) {
 /------------------------------------------------------------------------------------------------------*/
 /* test params
 aa.env.setValue("ModuleName", "EnvHealth");
-aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit");
+aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit,Expired_Pumper_Truck_Permit,Delinquent_Pumper_Truck_Permit");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
  */
 
@@ -185,7 +185,11 @@ try {
 	var emailAddress = "";
 	arrJobs = findSWADDLERecsToProcess();
 	if(arrJobs){
-		var batchId = getJobParam("BatchJobID"); 
+		var batchId = getJobParam("BatchJobID");
+		if(batchId.indexOf(",")>-1){
+			var arrBatchId = [];
+			arrBatchId = batchId.split(",");
+		}
 		var SEPInfo =[];
 		loadAppSpecific(SEPInfo);
 		var fromDate = "";
@@ -196,7 +200,7 @@ try {
 			thisJob = arrJobs[job];
 			var isActive = ""+thisJob["Active"];
 			var thisBatchId = ""+thisJob["Batch ID"];
-			if(isActive=="Yes" && (batchId=="ALL_BATCHES" || matches(batchId,"","undefined",null,thisBatchId))){
+			if(isActive=="Yes" && (batchId=="ALL_BATCHES" || matches(batchId,"","undefined",null,thisBatchId) || exists(batchId,arrBatchId))){
 				if(job>0){
 					var oldFromDate = fromDate;
 					var oldToDate = toDate;
@@ -255,7 +259,7 @@ try {
 				//don't keep pulling the same record set
 				logDebug("" );
 				logDebug("================== BATCH " + thisBatchId + " ======================");
-				//logDebug("batchID: " + thisBatchId);
+				//logDebug("batchId: " + thisBatchId);
 				logDebug(expStatus + " for Date Range -- fromDate: " + fromDate + ", toDate: " + toDate);
 				if(!oldFromDate || oldFromDate!=fromDate || oldToDate!=toDate || oldexpStatus!=expStatus){
 					findExpRecdsToProcess();
@@ -451,106 +455,6 @@ try{
 				logDebug("updated License expiration to " + newExpDate);
 			}
 		}
-		if (sendEmailToContactTypes.length > 0 && emailTemplate.length > 0 ) {
-			var conTypeArray = sendEmailToContactTypes.split(",");
-			var sendAllContacts = conTypeArray.indexOf("ALL") >= 0 || conTypeArray.indexOf("All") >= 0 || conTypeArray.indexOf("all") >= 0;
-			var sendPrimaryContact = conTypeArray.indexOf("PRIMARY") >= 0 || conTypeArray.indexOf("Primary") >= 0 || conTypeArray.indexOf("primary") >= 0;
-			// create an array of contactObjs
-			var conArray = [];
-
-			var capContactResult = aa.people.getCapContactByCapID(capId);
-			if (capContactResult.getSuccess()) {
-				var capContactArray = capContactResult.getOutput();
-			}
-			if (capContactArray) {
-				for (var yy in capContactArray) {
-					conArray.push(new contactObj(capContactArray[yy]));
-
-				}
-			}
-			// filter based on business rules in params
-			var sendArray = [];
-			for (thisCon in conArray) {
-				var c = conArray[thisCon];  
-				//if ((c.primary && sendPrimaryContact) || sendAllContacts) {
-				//logDebug("c.people.getFlag(): " + c.people.getFlag());
-				if ((c.people.getFlag()=="Y" && sendPrimaryContact) || sendAllContacts) {
-					sendArray.push(c); 
-				}
-				if (conTypeArray.length > 0) {
-					for (thisType in conTypeArray) {
-						if (c.type == conTypeArray[thisType]) {
-							sendArray.push(c);							
-						}
-					}
-				}
-			}
-			// process each qualified contact
-			aa.print("sendArray: " + sendArray.length);
-			for (var i in sendArray) {
-				//  create set  
-				var channel = ("" + lookup("CONTACT_PREFERRED_CHANNEL","" + sendArray[i].capContact.getPreferredChannel())).toUpperCase();
-				var email = sendArray[i].capContact.getEmail();
-				var cFName = sendArray[i].capContact.firstName;
-				var cLName = sendArray[i].capContact.lastName;
-				//logDebug("Notification requested for " + sendArray[i] + " preferred channel: " + channel);
-				if (!respectNotifyPrefs || sendArray[i].capContact.getPreferredChannel()==0 || (channel.indexOf("EMAIL") >= 0 || channel.indexOf("E-MAIL") >= 0 || channel.indexOf("Email") >= 0)) {
-					if (!email) {
-						logDebug("Email channel detected but contact has no email address--adding to notification set");
-						continue;
-					}else {
-						//currentUserID = "ADMIN";
-						//runReportAttach(capId,rptName, "altId", capId.getCustomID()); 
-						var eParams = aa.util.newHashtable(); 
-						//add email template notifications params here
-						
-						//added code to get location information
-						var fcapAddressObj = null;
-						var capAddResult = aa.address.getAddressByCapId(capId);
-						if (capAddResult.getSuccess())
-						{
-						  var fcapAddressObj = capAddResult.getOutput();
-				    	       for(I in fcapAddressObj)
-					      var location = fcapAddressObj[I];
-						}
-						
-						else
-                        var location = "";
-                        
-						//Added code to get Record Alias
-						
-						var recordCap = aa.cap.getCap(capId).getOutput();
-						var capAlias = recordCap.getCapType().getAlias();
-						
-						addParameter(eParams, "$$fileDateYYYYMMDD$$", fileDateYYYYMMDD);
-						addParameter(eParams, "$$altID$$", capId.getCustomID());
-						addParameter(eParams, "$$capID$$", capId.getCustomID());
-						addParameter(eParams, "$$capType$$", capAlias);
-						addParameter(eParams, "$$expirationDate$$", expDate);
-						addParameter(eParams, "$$contactFirstName$$", cFName);
-						addParameter(eParams, "$$contactFirstName$$", cLName);
-						addParameter(eParams, "$$location$$", location);
-						addParameter(eParams, "$$balanceDue$$", feeBalance());
-						logDebug("feeBalance(): " + feeBalance());
-						var rFiles = [];
-						logDebug("rptName: " + rptName);
-						if(!matches(rptName, null, "", "undefined")){
-							var rFile;
-							var rptParams = aa.util.newHashMap();
-							//add report params here
-							rFile = generateReport(capId,rptName,"Licenses",rptParams);
-							if (rFile) {
-								rFiles.push(rFile);
-							}
-						}
-						sendNotification(sysFromEmail,email,"",emailTemplate,eParams, rFiles,capId);
-						logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + email);
-					}
-				}else{
-					logDebug("Preferred channel is ignored, adding to notification set.");
-				}
-			}
-		}
 		// assign task
 		if (taskToAssign.length > 0) {
 			updateTaskDepartment(taskToAssign, assignTaskTo);
@@ -670,6 +574,106 @@ try{
 							//var feObj = addFeeByDate(capId, b1ExpDate, feeList.split(",")[fe], feeSched, feePeriod, 1, "N");
 						}
 					}
+				}
+			}
+		}
+		if (sendEmailToContactTypes.length > 0 && emailTemplate.length > 0 ) {
+			var conTypeArray = sendEmailToContactTypes.split(",");
+			var sendAllContacts = conTypeArray.indexOf("ALL") >= 0 || conTypeArray.indexOf("All") >= 0 || conTypeArray.indexOf("all") >= 0;
+			var sendPrimaryContact = conTypeArray.indexOf("PRIMARY") >= 0 || conTypeArray.indexOf("Primary") >= 0 || conTypeArray.indexOf("primary") >= 0;
+			// create an array of contactObjs
+			var conArray = [];
+
+			var capContactResult = aa.people.getCapContactByCapID(capId);
+			if (capContactResult.getSuccess()) {
+				var capContactArray = capContactResult.getOutput();
+			}
+			if (capContactArray) {
+				for (var yy in capContactArray) {
+					conArray.push(new contactObj(capContactArray[yy]));
+
+				}
+			}
+			// filter based on business rules in params
+			var sendArray = [];
+			for (thisCon in conArray) {
+				var c = conArray[thisCon];  
+				//if ((c.primary && sendPrimaryContact) || sendAllContacts) {
+				//logDebug("c.people.getFlag(): " + c.people.getFlag());
+				if ((c.people.getFlag()=="Y" && sendPrimaryContact) || sendAllContacts) {
+					sendArray.push(c); 
+				}
+				if (conTypeArray.length > 0) {
+					for (thisType in conTypeArray) {
+						if (c.type == conTypeArray[thisType]) {
+							sendArray.push(c);							
+						}
+					}
+				}
+			}
+			// process each qualified contact
+			aa.print("sendArray: " + sendArray.length);
+			for (var i in sendArray) {
+				//  create set  
+				var channel = ("" + lookup("CONTACT_PREFERRED_CHANNEL","" + sendArray[i].capContact.getPreferredChannel())).toUpperCase();
+				var email = sendArray[i].capContact.getEmail();
+				var cFName = sendArray[i].capContact.firstName;
+				var cLName = sendArray[i].capContact.lastName;
+				//logDebug("Notification requested for " + sendArray[i] + " preferred channel: " + channel);
+				if (!respectNotifyPrefs || sendArray[i].capContact.getPreferredChannel()==0 || (channel.indexOf("EMAIL") >= 0 || channel.indexOf("E-MAIL") >= 0 || channel.indexOf("Email") >= 0)) {
+					if (!email) {
+						logDebug("Email channel detected but contact has no email address--adding to notification set");
+						continue;
+					}else {
+						//currentUserID = "ADMIN";
+						//runReportAttach(capId,rptName, "altId", capId.getCustomID()); 
+						var eParams = aa.util.newHashtable(); 
+						//add email template notifications params here
+						
+						//added code to get location information
+						var fcapAddressObj = null;
+						var capAddResult = aa.address.getAddressByCapId(capId);
+						if (capAddResult.getSuccess())
+						{
+						  var fcapAddressObj = capAddResult.getOutput();
+				    	       for(I in fcapAddressObj)
+					      var location = fcapAddressObj[I];
+						}
+						
+						else
+                        var location = "";
+                        
+						//Added code to get Record Alias
+						
+						var recordCap = aa.cap.getCap(capId).getOutput();
+						var capAlias = recordCap.getCapType().getAlias();
+						
+						addParameter(eParams, "$$fileDateYYYYMMDD$$", fileDateYYYYMMDD);
+						addParameter(eParams, "$$altID$$", capId.getCustomID());
+						addParameter(eParams, "$$capID$$", capId.getCustomID());
+						addParameter(eParams, "$$capType$$", capAlias);
+						addParameter(eParams, "$$expirationDate$$", expDate);
+						addParameter(eParams, "$$contactFirstName$$", cFName);
+						addParameter(eParams, "$$contactFirstName$$", cLName);
+						addParameter(eParams, "$$location$$", location);
+						addParameter(eParams, "$$balanceDue$$", feeBalance());
+						logDebug("feeBalance(): " + feeBalance());
+						var rFiles = [];
+						logDebug("rptName: " + rptName);
+						if(!matches(rptName, null, "", "undefined")){
+							var rFile;
+							var rptParams = aa.util.newHashMap();
+							//add report params here
+							rFile = generateReport(capId,rptName,"Licenses",rptParams);
+							if (rFile) {
+								rFiles.push(rFile);
+							}
+						}
+						sendNotification(sysFromEmail,email,"",emailTemplate,eParams, rFiles,capId);
+						logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + email);
+					}
+				}else{
+					logDebug("Preferred channel is ignored, adding to notification set.");
 				}
 			}
 		}
