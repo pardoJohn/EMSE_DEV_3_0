@@ -1807,7 +1807,7 @@ try{
 	logDebug(err.stack)
 }}
 
-function sepRenewLicensePayment(){
+function sepRenewLicensePayment1(){
 try{
 	//see if any records are set up--module can be specific or "ALL", look for both
 	var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", appTypeArray[0]);
@@ -1829,6 +1829,7 @@ try{
 						if(sepRules[row]["Active"]=="Yes"){
 							var balDueMustBeZero = ""+sepRules[row]["Balance Due Must Be Zero"];
 							var balDueMustBeZero = ""+balDueMustBeZero.substring(0, 1).toUpperCase().equals("Y");
+							balanceDue=0;
 							if(balDueMustBeZero && balanceDue<=0){
 								var appMatch = true;
 								var recdType = ""+sepRules[row]["Record Type"];
@@ -1890,16 +1891,21 @@ try{
 										}
 										var yrsMosDays = ""+sepRules[row]["Years/Months/Days"];
 										if(!matches(yrsMosDays,"",null,"undefined")){
-											var expDateYear = sysDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
-											var expDate = dateFormatted(sysDate.getMonth(), sysDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
+											var b1ExpResult = aa.expiration.getLicensesByCapID(capId)
+											if (b1ExpResult.getSuccess()){
+												var b1Exp = b1ExpResult.getOutput();
+												var tmpDate = b1Exp.getExpDate();
+											}
+											var expDateYear = tmpDate.getYear()+parseInt(sepRules[row]["Expiration - Year(s)"]);
+											var expDate = dateFormatted(tmpDate.getMonth(), tmpDate.getDayOfMonth(), expDateYear, "MM/DD/YYYY");
 											var expDate = parseFloat(sepRules[row]["When to Expire"]);
 											if(yrsMosDays.toUpperCase()=="YEARS"){
-												var dtSched = dateAddMonths(sysDate,parseInt(expDate)*12);
+												var dtSched = dateAddMonths(tmpDate,parseInt(expDate)*12);
 											}else{
 												if(yrsMosDays.toUpperCase()=="MONTHS"){
-													var dtSched = dateAdd(sysDate,parseInt(expDate));
+													var dtSched = dateAdd(tmpDate,parseInt(expDate));
 												}else{
-													var dtSched = dateAdd(sysDate,parseInt(expDate));
+													var dtSched = dateAdd(tmpDate,parseInt(expDate));
 												}
 											}
 										}else{
@@ -1911,7 +1917,7 @@ try{
 											var newAppStatus = ""+sepRules[row]["New App Status"];
 										}
 										licEditExpInfo(newAppStatus, dtSched);
-										updateAppStatus(newAppStatus, "Updated via sepRenewLicensePayment.");
+										updateAppStatus(newAppStatus, "Updated via sepRenewLicensePayment1.");
 										var notName = "" + sepRules[row]["Notification Name"];
 										var rName = "" + sepRules[row]["Report Name"];
 										if(!matches(notName, "","undefined",null)){
@@ -1945,15 +1951,15 @@ try{
 											var result = eval(actionExpression);
 										}
 									}else{
-										logDebug("sepRenewLicensePayment: Check filter resolved to false: " + chkFilter);
+										logDebug("sepRenewLicensePayment1: Check filter resolved to false: " + chkFilter);
 									}
 									capId = currCapId;
 								}else{
-									logDebug("sepRenewLicensePayment: No app match: " + recdTypeArr);
+									logDebug("sepRenewLicensePayment1: No app match: " + recdTypeArr);
 								}
 							}else{
 								showMessage=true;
-								comment("Balance due is $" + feeBal.toFixed(2) + ".  License/Permit will not be issued.");
+								comment("Balance due is $" + balanceDue.toFixed(2) + ".  License/Permit will not be issued.");
 							}
 						}
 					}
