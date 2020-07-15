@@ -1807,7 +1807,7 @@ try{
 	logDebug(err.stack)
 }}
 
-function sepRenewLicensePayment1(){
+function sepRenewLicensePayment(){
 try{
 	//see if any records are set up--module can be specific or "ALL", look for both
 	var sepScriptConfig = aa.cap.getCapIDsByAppSpecificInfoField("Module Name", appTypeArray[0]);
@@ -1917,7 +1917,7 @@ try{
 											var newAppStatus = ""+sepRules[row]["New App Status"];
 										}
 										licEditExpInfo(newAppStatus, dtSched);
-										updateAppStatus(newAppStatus, "Updated via sepRenewLicensePayment1.");
+										updateAppStatus(newAppStatus, "Updated via sepRenewLicensePayment.");
 										var notName = "" + sepRules[row]["Notification Name"];
 										var rName = "" + sepRules[row]["Report Name"];
 										if(!matches(notName, "","undefined",null)){
