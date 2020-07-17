@@ -62,11 +62,12 @@ function getMasterScriptText(vScriptName) {
 | Start: BATCH PARAMETERS
 |
 /------------------------------------------------------------------------------------------------------*/
-/* test params
+/* test params 
 aa.env.setValue("ModuleName", "EnvHealth");
-aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit,Expired_Pumper_Truck_Permit,Delinquent_Pumper_Truck_Permit");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
- */
+aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit,Expired_Pumper_Truck_Permit,Delinquent_Pumper_Truck_Permit");
+aa.env.setValue("BatchJobID", "Delinquent_Pumper_Truck_Permit");
+*/
 
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
@@ -200,7 +201,7 @@ try {
 			thisJob = arrJobs[job];
 			var isActive = ""+thisJob["Active"];
 			var thisBatchId = ""+thisJob["Batch ID"];
-			if(isActive=="Yes" && (batchId=="ALL_BATCHES" || matches(batchId,"","undefined",null,thisBatchId) || exists(batchId,arrBatchId))){
+			if(isActive=="Yes" && (batchId=="ALL_BATCHES" || matches(batchId,"","undefined",null,thisBatchId) || exists(thisBatchId,arrBatchId))){
 				if(job>0){
 					var oldFromDate = fromDate;
 					var oldToDate = toDate;
@@ -436,7 +437,6 @@ try{
 			logDebug( "deactivated linked License");
 		}
 		// update expiration status
-		logDebug("newExpStatus: " + newExpStatus.length );
 		if (newExpStatus.length > 0) {
 			b1Exp.setExpStatus(newExpStatus);
 			aa.expiration.editB1Expiration(b1Exp.getB1Expiration());
@@ -612,7 +612,6 @@ try{
 				}
 			}
 			// process each qualified contact
-			aa.print("sendArray: " + sendArray.length);
 			for (var i in sendArray) {
 				//  create set  
 				var channel = ("" + lookup("CONTACT_PREFERRED_CHANNEL","" + sendArray[i].capContact.getPreferredChannel())).toUpperCase();
