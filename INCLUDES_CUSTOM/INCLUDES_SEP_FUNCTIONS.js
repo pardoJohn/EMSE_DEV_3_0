@@ -612,6 +612,10 @@ try{
 	addParameter(eParams, "$$contactEmail$$", priContact.capContact.email);
 	addParameter(eParams, "$$status$$", capStatus);
 	addParameter(eParams, "$$capType$$", cap.getCapType().getAlias());
+	var vEventName = aa.env.getValue("EventName");
+	if(vEventName.indexOf("Workflow")>-1){
+		addParameter(eParams, "$$wfComment$$", wfComment);
+	}
 	var priEmail = ""+priContact.capContact.getEmail();
 	//var capId4Email = aa.cap.createCapIDScriptModel(capId.getID1(), capId.getID2(), capId.getID3());
 	var rFiles = [];
@@ -1673,9 +1677,8 @@ try{
 									fndTaskStatus = true;
 								}
 							}
-							logDebug("fndTaskStatus: " + fndTaskStatus);
+							//logDebug("fndTaskStatus: " + fndTaskStatus);
 							if((!matches(taskName,"",null,"undefined") || wfTask==taskName) && fndTaskStatus){
-								logDebug("here");
 								var appMatch = true;
 								var recdType = ""+sepRules[row]["Record Type"];
 								var recdTypeArr = "" + recdType;
