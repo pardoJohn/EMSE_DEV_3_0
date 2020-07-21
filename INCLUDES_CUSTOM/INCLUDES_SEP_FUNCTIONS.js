@@ -1282,6 +1282,11 @@ try{
 												licEditExpInfo(newAppStatus, expDate);
 												updateAppStatus(newAppStatus, "Updated via sepIssueLicenseWorkflow.");
 												capId = currCapId;
+												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
+													copyAddresses(capId, parCapId);
+													copyParcels(capId, parCapId);
+													copyOwner(capId, parCapId);
+												}
 												if(""+sepRules[row]["Copy Custom Fields/Lists"]=="ALL"){
 													copyAppSpecific(parCapId);
 													copyASITables(capId, parCapId);
@@ -1323,11 +1328,6 @@ try{
 												}
 												if(""+sepRules[row]["Copy Continuing Education"]=="Yes"){
 													aa.continuingEducation.copyContEducationList(capId, parCapId);
-												}
-												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
-													copyAddresses(capId, parCapId);
-													copyParcels(capId, parCapId);
-													copyOwner(capId, parCapId);
 												}
 												var notName = "" + sepRules[row]["Notification Name"];
 												var rName = "" + sepRules[row]["Report Name"];
