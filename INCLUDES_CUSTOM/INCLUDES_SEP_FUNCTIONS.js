@@ -2014,7 +2014,7 @@ try{
 			paymentPeriodList.push(fperiod);
 			var invoiceResult_L = aa.finance.createInvoice(feeCap, feeSeqList, paymentPeriodList);
 			if (invoiceResult_L.getSuccess()){
-				logDebug("Invoicing assessed fee items" + feeCapMessage + " is successful.");
+				logDebug("Invoicing assessed fee items" + sepMsg  + feeCapMessage + " is successful.");
 			}else{
 				logDebug("**ERROR: Invoicing the fee items assessed" + feeCapMessage + " was not successful.  Reason: " + invoiceResult.getErrorMessage());
 			}
@@ -2036,6 +2036,25 @@ try{
 	return feeSeq;
 }catch(err){
 	logDebug("An error occurred in addFee: " + err.message);
+	logDebug(err.stack);
+}}
+
+//Function will copy all owners from source CAP (sCapID) to target CAP (tCapId)
+function copyOwner(sCapID, tCapID){
+try{
+	var ownrReq = aa.owner.getOwnerByCapId(sCapID);
+	if(ownrReq.getSuccess()){
+		var ownrObj = ownrReq.getOutput();
+		for (xx in ownrObj){
+			ownrObj[xx].setCapID(tCapID);
+			aa.owner.createCapOwnerWithAPOAttribute(ownrObj[xx]);
+			logDebug("Copied Owner: " + sepMsg + ownrObj[xx].getOwnerFullName());
+		}
+	}else{
+		logDebug("Error Copying Owner : " + ownrObj.getErrorType() + " : " + ownrObj.getErrorMessage());
+	}
+}catch(err){
+	logDebug("An error occurred in copyOwner: " + err.message);
 	logDebug(err.stack);
 }}
 //end corrected standard functions 
