@@ -1659,7 +1659,6 @@ try{
 									fndTaskStatus = true;
 								}
 							}else{
-								logDebug("here");
 								if(wfStatus==taskStatus){
 									fndTaskStatus = true;
 								}
@@ -2006,7 +2005,6 @@ try{
 		logDebug("Successfully added Fee " + fcode + ", Qty " + fqty + feeCapMessage);
 		logDebug("The assessed fee Sequence Number " + feeSeq + feeCapMessage);
 		if (finvoice == "Y" && arguments.length == 5){
-			logDebug("here");
 			feeSeqList.push(feeSeq);
 			paymentPeriodList.push(fperiod);
 			var invoiceResult_L = aa.finance.createInvoice(feeCap, feeSeqList, paymentPeriodList);
