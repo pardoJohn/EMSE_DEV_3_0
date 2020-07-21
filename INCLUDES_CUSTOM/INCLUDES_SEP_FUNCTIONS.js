@@ -1324,6 +1324,11 @@ try{
 												if(""+sepRules[row]["Copy Continuing Education"]=="Yes"){
 													aa.continuingEducation.copyContEducationList(capId, parCapId);
 												}
+												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
+													copyAddresses(capId, parCapId);
+													copyParcels(capId, parCapId);
+													copyOwner(capId, parCapId);
+												}
 												var notName = "" + sepRules[row]["Notification Name"];
 												var rName = "" + sepRules[row]["Report Name"];
 												if(!matches(notName, "","undefined",null)){
