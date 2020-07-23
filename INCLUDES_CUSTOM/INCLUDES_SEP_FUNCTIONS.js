@@ -1831,7 +1831,6 @@ try{
 						if(sepRules[row]["Active"]=="Yes"){
 							var balDueMustBeZero = ""+sepRules[row]["Balance Due Must Be Zero"];
 							var balDueMustBeZero = ""+balDueMustBeZero.substring(0, 1).toUpperCase().equals("Y");
-							balanceDue=0;
 							if(balDueMustBeZero && balanceDue<=0){
 								var appMatch = true;
 								var recdType = ""+sepRules[row]["Record Type"];
