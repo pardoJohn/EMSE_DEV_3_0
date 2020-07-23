@@ -1826,6 +1826,7 @@ try{
 				var cfgCapId = sepScriptConfigArr[sep].getCapID();
 				var sepRules = loadASITable("LICENSE RENEWAL - ON PAYMENT",cfgCapId);
 				var sysFromEmail = getAppSpecific("Agency From Email",cfgCapId);
+				var balNotZero=false;
 				if(sepRules.length>0){
 					for(row in sepRules){
 						if(sepRules[row]["Active"]=="Yes"){
@@ -1962,11 +1963,14 @@ try{
 									logDebug("sepRenewLicensePayment1: No app match: " + recdTypeArr);
 								}
 							}else{
-								showMessage=true;
-								comment("Balance due is $" + balanceDue.toFixed(2) + ".  License/Permit will not be issued.");
+								balNotZero=true;
 							}
 						}
 					}
+				}
+				if(balNotZero){
+					showMessage=true;
+					comment("Balance due is $" + balanceDue.toFixed(2) + ".  License/Permit will not be issued.");
 				}
 			}
 		}
