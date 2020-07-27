@@ -1287,6 +1287,9 @@ try{
 													copyParcels(capId, parCapId);
 													copyOwner(capId, parCapId);
 												}
+												if(""+sepRules[row]["Copy Lic Prof"]=="Yes"){
+													copyLicensedProf(capId, parCapId);
+												}
 												if(""+sepRules[row]["Copy Custom Fields/Lists"]=="ALL"){
 													copyAppSpecific(parCapId);
 													copyASITables(capId, parCapId);
