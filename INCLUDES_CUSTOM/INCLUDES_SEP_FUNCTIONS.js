@@ -1285,6 +1285,7 @@ try{
 												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
 													copyAddresses(capId, parCapId);
 													copyParcels(capId, parCapId);
+													updateRefParcelToCap();
 													copyOwner(capId, parCapId);
 												}
 												if(""+sepRules[row]["Copy Lic Prof"]=="Yes"){
@@ -1347,6 +1348,10 @@ try{
 															var arrType = getContactObjs(capId);
 															for(con in arrType){
 																sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, "N");
+															}
+															var arrLPType = getLicensedProfessionalObjectsByRecord(capId);
+															for(con in arrLPType){
+																sepProcessContactsForNotif(arrLPType[con], notName, rName, sysFromEmail, "N");
 															}
 														}else{
 															var priContact = getContactObj(capId,cntType);
