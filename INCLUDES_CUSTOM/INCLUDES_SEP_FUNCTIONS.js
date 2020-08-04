@@ -1285,7 +1285,7 @@ try{
 												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
 													copyAddresses(capId, parCapId);
 													copyParcels(capId, parCapId);
-													updateRefParcelToCap();
+													updateRefParcelToCap(parCapId);
 													copyOwner(capId, parCapId);
 												}
 												if(""+sepRules[row]["Copy Lic Prof"]=="Yes"){

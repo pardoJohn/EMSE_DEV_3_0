@@ -17,9 +17,9 @@ var errLog = "";
 var debugText = "";
 var showDebug = true;	
 SENDEMAILS = true;	
+sepMsg="VFP";
 var showMessage = false;
 var message = "";
-var maxSeconds = 7 * 60;
 var br = "<br>";
 var useAppSpecificGroupName = false;
 var publicUser = false;
@@ -48,7 +48,7 @@ function getScriptText(vScriptName){
 	var emseScript = emseBiz.getScriptByPK(aa.getServiceProviderCode(),vScriptName,"ADMIN");
 	return emseScript.getScriptText() + "";
 }
-
+	
 function getMasterScriptText(vScriptName) {
     vScriptName = vScriptName.toUpperCase();
     var emseBiz = aa.proxyInvoker.newInstance("com.accela.aa.emse.emse.EMSEBusiness").getOutput();
@@ -62,19 +62,19 @@ function getMasterScriptText(vScriptName) {
 | Start: BATCH PARAMETERS
 |
 /------------------------------------------------------------------------------------------------------*/
-/* test params 
+/* test params
 aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
-aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Truck_Permit,Expired_Pumper_Truck_Permit,Delinquent_Pumper_Truck_Permit");
-aa.env.setValue("BatchJobID", "Delinquent_Pumper_Truck_Permit");
-*/
+aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Trk_Permit,Expired_Pumper_Trk,Delinquent_Pumper_Trk");
+aa.env.setValue("BatchJobID", "About_To_Expire_Small_Water");
+ */
 
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
 if (batchJobResult.getSuccess())
   {
   batchJobRes = batchJobResult.getOutput();
-  logDebug("!!!VOTE FOR PEDRO THIRD UPDATE!!!!");
+  //logDebug("!!!VOTE FOR PEDRO THIRD UPDATE!!!!");
   logDebug("Batch Job " + batchJobName + " Job ID is " + batchJobRes);
   }
 else{
@@ -478,14 +478,20 @@ try{
 			}
 		}
 		if (createNotifySets && setPrefix != "") {
+			var setCreationFailure = false;
 			if(!setCreated) {
 				var vExpSet =  createExpirationSet(setPrefix);
-				var sExpSet = vExpSet.toUpperCase();
-				var setHeaderSetType = aa.set.getSetByPK(sExpSet).getOutput();
-				setHeaderSetType.setRecordSetType(setType);
-				setHeaderSetType.setSetStatus(setStatus);
-				updResult = aa.set.updateSetHeader(setHeaderSetType);
-				setCreated = true;
+				if(vExpSet){
+					var sExpSet = vExpSet.toUpperCase();
+					var setHeaderSetType = aa.set.getSetByPK(sExpSet).getOutput();
+					setHeaderSetType.setRecordSetType(setType);
+					setHeaderSetType.setSetStatus(setStatus);
+					updResult = aa.set.updateSetHeader(setHeaderSetType);
+					setCreated = true;
+				}else{
+					logDebug("*****SET NOT CREATED****");
+					setCreationFailure = true;
+				}
 			}
 			if (masterSet) {
 				var setResult = aa.set.addSetofSetMember(masterSet, s.id); 
@@ -494,11 +500,13 @@ try{
 					}
 				}
 			} 
-			setAddResult=aa.set.add(sExpSet,capId);
-			if(!setAddResult.getSuccess()){
-				logDebug("Warning: error adding record to set " + setAddResult.getErrorMessage());
-			}else{
-				logDebug("Successfully added record to set.")
+			if(!setCreationFailure){
+				setAddResult=aa.set.add(sExpSet,capId);
+				if(!setAddResult.getSuccess()){
+					logDebug("Warning: error adding record to set " + setAddResult.getErrorMessage());
+				}else{
+					logDebug("Successfully added record to set.")
+				}
 			}
 		// Add to the overall Set
 		/*if (setPrefix != "") {
