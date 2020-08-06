@@ -443,6 +443,7 @@ try{
 							dtSched = CInfo[custDtFld];
 						}else{
 							var cldName = ""+chklstDateName;
+							//logDebug("cldName: " + cldName);
 							if(!matches(cldName,"",null,"undefined")){
 								var cklDateName = cldName.trim();
 								var cldItem = ""+chklstDateItem;
@@ -459,32 +460,28 @@ try{
 								//logDebug("cklDateGroup: " +cklDateGroup);
 								//logDebug("cklDateSubGroup: " +cklDateSubGroup);
 								//logDebug("cklDateField: " +cklDateField);
-								var dtSchedDays = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
-								if(dtSchedDays){
-									var dtSched = dateAdd(sysDate,parseInt(dtSchedDays));
-									//logDebug("GUIDE: " + dtSched);
-								}
+								whenSched = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+							}
+							var pendOrSched = ""+pendSched;
+							if(pendOrSched.toUpperCase()=="PENDING"){
+								createPendingInspection(insNewGroup,insNewType);
 							}else{
-								var pendOrSched = ""+pendSched;
-								if(pendOrSched.toUpperCase()=="PENDING"){
-									createPendingInspection(insNewGroup,insNewType);
+								//logDebug("monthDays: "+monthDays);
+								monthDays = ""+monthDays;
+								if(monthDays.toUpperCase()=="YEARS"){
+									logDebug("YEARS: " + whenSched);
+									var dtSched = dateAddMonths(sysDate,parseInt(whenSched)*12);
 								}else{
-									monthDays = ""+monthDays;
-									if(monthDays.toUpperCase()=="YEARS"){
-										//logDebug("YEARS: " + dtSched);
-										var dtSched = dateAddMonths(sysDate,parseInt(whenSched)*12);
+									if(monthDays.toUpperCase()=="MONTHS"){
+										logDebug("MONTHS: " + whenSched);
+										var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
 									}else{
-										if(monthDays.toUpperCase()=="MONTHS"){
-											//logDebug("MONTHS: " + dtSched);
-											var dtSched = dateAddMonths(sysDate,parseInt(whenSched));
+										calWkgDay = ""+calWkgDay;
+										if(calWkgDay.toUpperCase()=="WORKING"){
+											var dtSched = dateAdd(sysDate,parseInt(whenSched),true);
 										}else{
-											calWkgDay = ""+calWkgDay;
-											if(calWkgDay.toUpperCase()=="WORKING"){
-												var dtSched = dateAdd(sysDate,parseInt(whenSched),true);
-											}else{
-												var dtSched = dateAdd(sysDate,parseInt(whenSched));
-												//logDebug("WORKING: " + dtSched);
-											}
+											var dtSched = dateAdd(sysDate,parseInt(whenSched));
+											logDebug("WORKING: " + whenSched);
 										}
 									}
 								}
