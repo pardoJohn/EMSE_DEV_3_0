@@ -185,6 +185,8 @@ try{
 
 function sepEmailNotifContactInsp(recdType, contactType, respectPriChannel, notName, rName, inspName, inspStatus, sysFromEmail, addtlQuery) {
 try{
+	inspName=""+inspName;
+	inspStatus=""+inspStatus;
 	if((matches(inspName,null,"","undefined") || inspType==""+inspName) && (inspStatus.toUpperCase()=="ALL" || inspResult == ""+inspStatus)){
 		var appMatch = true;
 		var recdTypeArr = "" + recdType
@@ -454,13 +456,19 @@ try{
 								var cklDateSubGroup = cldSGroup.trim();
 								var cldField = ""+chklstDateFieldName;
 								var cklDateField = cldField.trim();
-								//logDebug("inspId: " +inspId);
-								//logDebug("cklDateName: " +cklDateName);
-								//logDebug("cklDateItem: " +cklDateItem);
-								//logDebug("cklDateGroup: " +cklDateGroup);
-								//logDebug("cklDateSubGroup: " +cklDateSubGroup);
-								//logDebug("cklDateField: " +cklDateField);
-								whenSched = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+								/*
+								logDebug("inspId: " +inspId);
+								logDebug("cklDateName: " +cklDateName);
+								logDebug("cklDateItem: " +cklDateItem);
+								logDebug("cklDateGroup: " +cklDateGroup);
+								logDebug("cklDateSubGroup: " +cklDateSubGroup);
+								logDebug("cklDateField: " +cklDateField);
+								*/
+								whenSched = getGuidesheetASIValue1(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+								if(!whenSched){
+									logDebug("Error retrieving checklist item. Setting days to 30.");
+									whenSched = 30;
+								}
 							}
 							var pendOrSched = ""+pendSched;
 							if(pendOrSched.toUpperCase()=="PENDING"){
