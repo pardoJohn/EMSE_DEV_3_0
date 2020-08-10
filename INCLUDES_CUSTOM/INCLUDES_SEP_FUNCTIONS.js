@@ -626,20 +626,20 @@ try{
 			var permit = aa.reportManager.hasPermission(rName,currentUserID);
 			if (permit.getOutput().booleanValue()) {
 				var reportResult = aa.reportManager.getReportResult(report);
-				if(reportResult) {
+				if(reportResult.getSuccess()) {
 					reportOutput = reportResult.getOutput();
 					var reportFile=aa.reportManager.storeReportToDisk(reportOutput);
 					reportFile=reportFile.getOutput();
 					rFiles.push(reportFile);
 					emailRpt = true;
 				}else {
-					logDebug("System failed get report: " + reportResult.getErrorType() + ":" +reportResult.getErrorMessage());
+					logDebug("System failed get report: " +rptName+": "+ reportResult.getErrorType() + ": " +reportResult.getErrorMessage());
 				}
 			} else {
-				logDebug("You have no permission.");
+				logDebug("You do not have permission to run the report " + rptName);
 			}	
 		}else{
-			logDebug("An error occurred retrieving the report: "+ report.getErrorMessage());
+			logDebug("An error occurred retrieving the report: " +rptName+": "+ report.getErrorMessage());
 		}
 	}
 	if(!emailRpt){
