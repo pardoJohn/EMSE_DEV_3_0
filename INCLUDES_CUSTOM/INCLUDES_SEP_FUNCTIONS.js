@@ -609,6 +609,12 @@ try{
 	if(vEventName.indexOf("Workflow")>-1){
 		addParameter(eParams, "$$wfComment$$", wfComment);
 	}
+	if(vEventName.indexOf("Inspection")>-1){
+		addParameter(eParams, "$$inspResultDate$$", inspResultDate);
+		addParameter(eParams, "$$inspType$$", inspType);
+		addParameter(eParams, "$$inspResult$$", inspResult);
+		addParameter(eParams, "$$inspComment$$", inspResultComment);
+	}
 	var priEmail = ""+priContact.capContact.getEmail();
 	//var capId4Email = aa.cap.createCapIDScriptModel(capId.getID1(), capId.getID2(), capId.getID3());
 	var rFiles = [];
