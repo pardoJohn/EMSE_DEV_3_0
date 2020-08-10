@@ -215,6 +215,7 @@ try{
 					}
 				}else{
 					if(cntType.toUpperCase()=="ALL"){
+						cap = aa.cap.getCap(capId).getOutput();
 						var arrType = getContactObjs(capId);
 						for(con in arrType){
 							sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, respectPriChannel);
@@ -464,7 +465,7 @@ try{
 								logDebug("cklDateSubGroup: " +cklDateSubGroup);
 								logDebug("cklDateField: " +cklDateField);
 								*/
-								whenSched = getGuidesheetASIValue1(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
+								whenSched = getGuidesheetASIValue(inspId,cklDateName,cklDateItem,cklDateGroup,cklDateSubGroup, cklDateField);
 								if(!whenSched){
 									logDebug("Error retrieving checklist item. Setting days to 30.");
 									whenSched = 30;
