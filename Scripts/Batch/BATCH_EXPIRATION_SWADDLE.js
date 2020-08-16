@@ -63,11 +63,12 @@ function getMasterScriptText(vScriptName) {
 |
 /------------------------------------------------------------------------------------------------------*/
 /* test params
+ */
 aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
 aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Trk_Permit,Expired_Pumper_Trk,Delinquent_Pumper_Trk");
 aa.env.setValue("BatchJobID", "About_To_Expire_Small_Water");
- */
+aa.env.setValue("BatchJobID", "About_To_Expire");
 
 batchJobResult = aa.batchJob.getJobID()
 batchJobName = "" + aa.env.getValue("BatchJobName");
@@ -228,11 +229,11 @@ try {
 				taskToAssign = ""+thisJob["Task to Assign"]; 
 				assignTaskTo = ""+thisJob["Assign Task To"]; 
 				deactivateLicense = ""+thisJob["Deactivate License"]; // deactivate the LP
-				deactivateLicense = deactivateLicense.substring(0, 1).toUpperCase().equals("Yes"); // deactivate the LP
+				deactivateLicense = deactivateLicense.substring(0, 1).toUpperCase().equals("Y"); // deactivate the LP
 				lockParentLicense = ""+thisJob["Parent License Condition"]; // add this lock on the parent license
-				lockParentLicense = lockParentLicense.substring(0, 1).toUpperCase().equals("Yes"); // add this lock on the parent license
+				lockParentLicense = lockParentLicense.substring(0, 1).toUpperCase().equals("Y"); // add this lock on the parent license
 				createRenewalRecord = ""+thisJob["Create Renewal Record"]; // create a temporary record
-				createRenewalRecord = createRenewalRecord.substring(0, 1).toUpperCase().equals("Yes"); // create a temporary record
+				createRenewalRecord = createRenewalRecord.substring(0, 1).toUpperCase().equals("Y"); // create a temporary record
 				feeSched = ""+thisJob["Fee Schedule"]; //
 				feeList = ""+thisJob["List of Fees"]; // comma delimted list of fees to add to renewal record
 				feePeriod = ""+thisJob["Fee Period"]; // fee period to use {LICENSE}
@@ -368,7 +369,7 @@ try{
 		var expDate = b1Exp.getExpDate();
 		if (expDate) {
 			var b1ExpDate = expDate.getMonth() + "/" + expDate.getDayOfMonth() + "/" + expDate.getYear();
-			b1ExpDate = dateAdd(b1ExpDate,1);
+			//b1ExpDate = dateAdd(b1ExpDate,1);
 		}
 		var b1Status = b1Exp.getExpStatus();
 		var renewalCapId = null;
@@ -500,7 +501,7 @@ try{
 					}
 				}
 			} 
-			if(!setCreationFailure){
+			if(createNotifySets && !setCreationFailure){
 				setAddResult=aa.set.add(sExpSet,capId);
 				if(!setAddResult.getSuccess()){
 					logDebug("Warning: error adding record to set " + setAddResult.getErrorMessage());
@@ -659,7 +660,7 @@ try{
 						addParameter(eParams, "$$altID$$", capId.getCustomID());
 						addParameter(eParams, "$$capID$$", capId.getCustomID());
 						addParameter(eParams, "$$capType$$", capAlias);
-						addParameter(eParams, "$$expirationDate$$", expDate);
+						addParameter(eParams, "$$expirationDate$$", b1ExpDate);
 						addParameter(eParams, "$$contactFirstName$$", cFName);
 						addParameter(eParams, "$$contactFirstName$$", cLName);
 						addParameter(eParams, "$$location$$", location);
