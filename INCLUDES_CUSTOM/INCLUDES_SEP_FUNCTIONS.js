@@ -540,7 +540,6 @@ function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, re
 try{
 	useParCapForRpt = false;
 	if (arguments.length == 6) useParCapForRpt = arguments[5]; 
-	logDebug("useParCapForRpt: " + useParCapForRpt);
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
 		if(!matches(priChannel, "",null,"undefined", false)){
@@ -627,6 +626,7 @@ try{
 	var currCapId = capId;
 	if(useParCapForRpt){
 		capId = parCapId;
+		logDebug("HERE!");
 	}
 	var rptName = ""+rName;
 	if(!matches(rptName, null, "", "undefined")){
