@@ -589,6 +589,7 @@ try{
 	var itemCap = capId;
 	if (arguments.length > 4) useParCapForRpt = arguments[4]; // use cap ID specified in args
 	if (arguments.length > 5) itemCap = arguments[5]; // use cap ID specified in args
+	logDebug("useParCapForRpt: " + useParCapForRpt);
 	logDebug("parCapId: " + parCapId);
 	var id1 = itemCap.ID1;
  	var id2 = itemCap.ID2;
