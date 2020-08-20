@@ -541,7 +541,6 @@ try{
 	useParCapForRpt = false;
 	if (arguments.length == 6) useParCapForRpt = arguments[5]; 
 	logDebug("useParCapForRpt: " + useParCapForRpt);
-	logDebug("parCapId: " + parCapId);
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
 		if(!matches(priChannel, "",null,"undefined", false)){
@@ -590,6 +589,7 @@ try{
 	var itemCap = capId;
 	if (arguments.length > 4) useParCapForRpt = arguments[4]; // use cap ID specified in args
 	if (arguments.length > 5) itemCap = arguments[5]; // use cap ID specified in args
+	logDebug("parCapId: " + parCapId);
 	var id1 = itemCap.ID1;
  	var id2 = itemCap.ID2;
  	var id3 = itemCap.ID3;
