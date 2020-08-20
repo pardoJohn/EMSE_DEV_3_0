@@ -539,7 +539,7 @@ try{
 function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel){
 try{
 	useParCapForRpt = false;
-	if (arguments.length == 6) useParCapForRpt = arguments[6]; // use cap ID specified in args
+	if (arguments.length == 6) useParCapForRpt = arguments[5]; 
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
 		if(!matches(priChannel, "",null,"undefined", false)){
