@@ -541,6 +541,7 @@ try{
 	useParCapForRpt = false;
 	if (arguments.length == 6) useParCapForRpt = arguments[5]; 
 	logDebug("useParCapForRpt: " + useParCapForRpt);
+	logDebug("parCapId: " + parCapId);
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
 		if(!matches(priChannel, "",null,"undefined", false)){
