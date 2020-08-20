@@ -621,10 +621,12 @@ try{
 				}
 			}
 			// process each qualified contact
+			var arrSendEmails = "";
 			for (var i in sendArray) {
 				//  create set  
 				var channel = ("" + lookup("CONTACT_PREFERRED_CHANNEL","" + sendArray[i].capContact.getPreferredChannel())).toUpperCase();
 				var email = sendArray[i].capContact.getEmail();
+				arrSendEmails += email+"; ";
 				var cFName = sendArray[i].capContact.firstName;
 				var cLName = sendArray[i].capContact.lastName;
 				//logDebug("Notification requested for " + sendArray[i] + " preferred channel: " + channel);
@@ -677,13 +679,13 @@ try{
 								rFiles.push(rFile);
 							}
 						}
-						sendNotification(sysFromEmail,email,"",emailTemplate,eParams, rFiles,capId);
-						logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + email);
 					}
 				}else{
 					logDebug("Preferred channel is ignored, adding to notification set.");
 				}
 			}
+			sendNotification(sysFromEmail,arrSendEmails,"",emailTemplate,eParams, rFiles,capId);
+			logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + arrSendEmails);
 		}
 	}
 	logDebug("----------------------------------------");

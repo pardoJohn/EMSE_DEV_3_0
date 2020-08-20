@@ -538,11 +538,13 @@ try{
 
 function sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, respectPriChannel){
 try{
+	useParCapForRpt = false;
+	if (arguments.length == 6) useParCapForRpt = arguments[6]; // use cap ID specified in args
 	if(priContact){
 		var priChannel =  lookup("CONTACT_PREFERRED_CHANNEL",""+ priContact.capContact.getPreferredChannel());
 		if(!matches(priChannel, "",null,"undefined", false)){
 			if(!respectPriChannel || priChannel.indexOf("Email") > -1 || priChannel.indexOf("E-mail") > -1){
-				sepSendNotification(sysFromEmail,priContact,notName,rName);
+				sepSendNotification(sysFromEmail,priContact,notName,rName,useParCapForRpt);
 			}else{
 				if(respectPriChannel && priChannel.indexOf("Postal") > -1){
 					var addrString = "";
@@ -571,7 +573,7 @@ try{
 			}
 		}else{
 			logDebug("No primary channel found.  Defaulting to emailing the notification.");
-			sepSendNotification(sysFromEmail,priContact,notName,rName);
+			sepSendNotification(sysFromEmail,priContact,notName,rName,useParCapForRpt);
 		}
 	}else{
 		logDebug("An error occurred retrieving the contactObj for " + contactType + ": " + priContact);
@@ -584,7 +586,8 @@ try{
 function sepSendNotification(emailFrom,priContact,notName,rName){
 try{
 	var itemCap = capId;
-	if (arguments.length == 7) itemCap = arguments[6]; // use cap ID specified in args
+	if (arguments.length > 4) useParCapForRpt = arguments[4]; // use cap ID specified in args
+	if (arguments.length > 5) itemCap = arguments[5]; // use cap ID specified in args
 	var id1 = itemCap.ID1;
  	var id2 = itemCap.ID2;
  	var id3 = itemCap.ID3;
@@ -618,6 +621,10 @@ try{
 	var priEmail = ""+priContact.capContact.getEmail();
 	//var capId4Email = aa.cap.createCapIDScriptModel(capId.getID1(), capId.getID2(), capId.getID3());
 	var rFiles = [];
+	var currCapId = capId;
+	if(useParCapForRpt){
+		capId = parCapId;
+	}
 	var rptName = ""+rName;
 	if(!matches(rptName, null, "", "undefined")){
 		var report = aa.reportManager.getReportInfoModelByName(rName);
@@ -648,6 +655,7 @@ try{
 			logDebug("An error occurred retrieving the report: " +rptName+": "+ report.getErrorMessage());
 		}
 	}
+	capId = currCapId;
 	if(!emailRpt){
 		rFiles = [];
 	}
@@ -1236,7 +1244,7 @@ try{
 												logDebug("Parent ID not correctly formatted: " + sepRules[row]["Parent Record Type"]);
 												return false;
 											}else{
-												var parCapId = false;
+												parCapId = false;
 												var appCreateResult = aa.cap.createApp(arrParRec[0], arrParRec[1], arrParRec[2], arrParRec[3],capName);
 												logDebug("creating cap " +arrParRec);
 												if (appCreateResult.getSuccess()){
@@ -1353,21 +1361,21 @@ try{
 														var arrType = cntType.split(",");
 														for(con in arrType){
 															var priContact = getContactObj(capId,arrType[con]);
-															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
+															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N",true);
 														}
 													}else{
 														if(cntType.toUpperCase()=="ALL"){
 															var arrType = getContactObjs(capId);
 															for(con in arrType){
-																sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, "N");
+																sepProcessContactsForNotif(arrType[con], notName, rName, sysFromEmail, "N",true);
 															}
 															var arrLPType = getLicensedProfessionalObjectsByRecord(capId);
 															for(con in arrLPType){
-																sepProcessContactsForNotif(arrLPType[con], notName, rName, sysFromEmail, "N");
+																sepProcessContactsForNotif(arrLPType[con], notName, rName, sysFromEmail, "N",true);
 															}
 														}else{
 															var priContact = getContactObj(capId,cntType);
-															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N");
+															sepProcessContactsForNotif(priContact, notName, rName, sysFromEmail, "N",true);
 														}						
 													}						
 												}else{
@@ -2000,6 +2008,29 @@ try{
 	logDebug(err.stack)
 }}
 
+function getRenewalCapByParentCapIDForInComplete(parentCapid){
+try{
+	if (parentCapid == null || aa.util.instanceOfString(parentCapid)){
+		return false;
+	}
+	var result = aa.cap.getProjectByMasterID(parentCapid, "Renewal", "Incomplete");
+	if(result.getSuccess()){
+		projectScriptModels = result.getOutput();
+		if (projectScriptModels == null || projectScriptModels.length == 0){
+			logDebug("ERROR: Failed to get renewal CAP by parent CAPID(" + parentCapid + ") for review");
+			return false;
+		}
+		projectScriptModel = projectScriptModels[0];
+		return projectScriptModel;
+	}else{
+	  logDebug("ERROR: Failed to get renewal CAP by parent CAP(" + parentCapid + ") for review: " + result.getErrorMessage());
+	  return false;
+	}
+}catch (err){
+	logDebug("A JavaScript Error occurred in getRenewalCapByParentCapIDForInComplete:  " + err.message);
+	logDebug(err.stack)
+}}
+
 //start: corrected standard functions
 function doScriptActions() {
 	if (typeof(appTypeArray) == "object") {
@@ -2081,5 +2112,7 @@ try{
 	logDebug(err.stack);
 }}
 //end corrected standard functions 
+
+
 
 //INCLUDES_SEP_CUSTOM END
