@@ -67,7 +67,7 @@ aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
 aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Trk_Permit,Expired_Pumper_Trk,Delinquent_Pumper_Trk");
 aa.env.setValue("BatchJobID", "About_To_Expire_Small_Water");
-aa.env.setValue("BatchJobID", "About_To_Expire");
+aa.env.setValue("BatchJobID", "About_To_Expire_Septic_OM");
  */
 
 batchJobResult = aa.batchJob.getJobID()
@@ -369,7 +369,7 @@ try{
 		var expDate = b1Exp.getExpDate();
 		if (expDate) {
 			var b1ExpDate = expDate.getMonth() + "/" + expDate.getDayOfMonth() + "/" + expDate.getYear();
-			//b1ExpDate = dateAdd(b1ExpDate,1);
+			b1ExpDate = dateAdd(b1ExpDate,1);
 		}
 		var b1Status = b1Exp.getExpStatus();
 		var renewalCapId = null;
