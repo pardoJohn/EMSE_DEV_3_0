@@ -67,7 +67,7 @@ aa.env.setValue("ModuleName", "EnvHealth");
 aa.env.setValue("BatchJobID", "ALL_BATCHES");
 aa.env.setValue("BatchJobID", "About_To_Expire_Pumper_Trk_Permit,Expired_Pumper_Trk,Delinquent_Pumper_Trk");
 aa.env.setValue("BatchJobID", "About_To_Expire_Small_Water");
-aa.env.setValue("BatchJobID", "About_To_Expire_Septic_OM");
+aa.env.setValue("BatchJobID", "About_To_Expire_Vend_Mach");
  */
 
 batchJobResult = aa.batchJob.getJobID()
@@ -622,11 +622,14 @@ try{
 			}
 			// process each qualified contact
 			var arrSendEmails = "";
+			var rFiles = [];
 			for (var i in sendArray) {
 				//  create set  
 				var channel = ("" + lookup("CONTACT_PREFERRED_CHANNEL","" + sendArray[i].capContact.getPreferredChannel())).toUpperCase();
 				var email = sendArray[i].capContact.getEmail();
-				arrSendEmails += email+"; ";
+				if(!matches(email,null,"","undefined")){
+					arrSendEmails += email+"; ";
+				}
 				var cFName = sendArray[i].capContact.firstName;
 				var cLName = sendArray[i].capContact.lastName;
 				//logDebug("Notification requested for " + sendArray[i] + " preferred channel: " + channel);
@@ -684,8 +687,13 @@ try{
 					logDebug("Preferred channel is ignored, adding to notification set.");
 				}
 			}
-			sendNotification(sysFromEmail,arrSendEmails,"",emailTemplate,eParams, rFiles,capId);
-			logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + arrSendEmails);
+			logDebug("arrSendEmails: " + arrSendEmails);
+			if(arrSendEmails.length>0){
+				sendNotification(sysFromEmail,arrSendEmails,"",emailTemplate,eParams, rFiles,capId);
+				logDebug(altId + ": Sent Email template " + emailTemplate + " to " + conTypeArray[thisType] + " : " + arrSendEmails);
+			}else{
+				logDebug("No emails found.  Not emailing.");
+			}
 		}
 	}
 	logDebug("----------------------------------------");
