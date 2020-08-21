@@ -636,7 +636,6 @@ try{
 			var rParams = aa.util.newHashMap(); 
 			logDebug("capId.getCustomID(): " + capId.getCustomID());
 			rParams.put("altId",capId.getCustomID());
-			rParams.put("RecordId",capId.getCustomID());
 			var vEventName = aa.env.getValue("EventName");
 			if(vEventName.indexOf("Inspection")>-1){
 				rParams.put("InspectionNo",inspId);
