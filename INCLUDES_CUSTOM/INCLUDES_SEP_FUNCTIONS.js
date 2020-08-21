@@ -626,7 +626,6 @@ try{
 	var currCapId = capId;
 	if(useParCapForRpt){
 		capId = parCapId;
-		logDebug("HERE!");
 	}
 	var rptName = ""+rName;
 	if(!matches(rptName, null, "", "undefined")){
@@ -636,6 +635,7 @@ try{
 			report.setModule(appTypeArray[0]);
 			report.setCapId(capId.getID1() + "-" + capId.getID2() + "-" + capId.getID3());
 			var rParams = aa.util.newHashMap(); 
+			logDebug("capId.getCustomID(): " + capId.getCustomID());
 			rParams.put("altId",capId.getCustomID());
 			report.setReportParameters(rParams);
 			report.getEDMSEntityIdModel().setAltId(capId.getCustomID());
