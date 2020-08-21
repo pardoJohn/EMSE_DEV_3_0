@@ -636,6 +636,11 @@ try{
 			var rParams = aa.util.newHashMap(); 
 			logDebug("capId.getCustomID(): " + capId.getCustomID());
 			rParams.put("altId",capId.getCustomID());
+			rParams.put("RecordId",capId.getCustomID());
+			var vEventName = aa.env.getValue("EventName");
+			if(vEventName.indexOf("Inspection")>-1){
+				rParams.put("InspectionNo",inspId);
+			}
 			report.setReportParameters(rParams);
 			report.getEDMSEntityIdModel().setAltId(capId.getCustomID());
 			var permit = aa.reportManager.hasPermission(rName,currentUserID);
