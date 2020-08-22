@@ -1311,24 +1311,22 @@ try{
 												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
 													copyAddresses(capId, parCapId);
 													copyParcels(capId, parCapId);
-													arrThisRecd = aa.parcel.getParcelandAttribute(capId, null);
-													if (arrThisRecd.getSuccess()) {
-														arrThisRecd = arrThisRecd.getOutput().toArray();
-														var tParcelScriptModel = arrThisRecd[p];
-														var tParcelNo = tParcelScriptModel.getParcelNumber();
-														//find parcel to update
-														var tAttributes = tParcelScriptModel.getParcelAttribute();
-														parcelScriptModel.setParcelAttribute(tAttributes);
-														var capParcelModel = aa.parcel.getCapParcelModel().getOutput();
-														capParcelModel.setCapIDModel(itemCap);
-														capParcelModel.setParcelNo(parcelNo);
-														capParcelModel.setParcelModel(parcelScriptModel);
-														var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
-														if(updateResult.getSuccess()){
-															logDebug("Parcel Attributes updated successfully");
-														}else{
-															logDebug("Error updating parcel attributes: " + updateResult.getErrorMessage() );
+													var PInfo=[];
+													loadParcelAttributes(PInfo);
+													attributesMap = [];
+													for(p in PInfo){
+														var tAttr = ""+p.replace("ParcelAttribute.","");
+														attributesMap[tAttr]=PInfo[p];
+													}
+													var capParcelResult = aa.parcel.getParcelandAttribute(parCapId,null);
+													if (capParcelResult.getSuccess()){ 
+														var Parcels = capParcelResult.getOutput().toArray(); 
+														for (zz in Parcels){
+															var ParcelValidatedNumber = Parcels[zz].getParcelNumber();
+															updateParcelAttributes(attributesMap, ParcelValidatedNumber, parCapId);
 														}
+													}else{ 
+														logDebug("**ERROR: getting parcels by cap ID: " + capParcelResult.getErrorMessage());
 													}
 													updateRefParcelToCap(parCapId);
 													copyOwner(capId, parCapId);
@@ -2139,7 +2137,9 @@ try{
 
 function updateParcelAttributes(attributesMap, parcelNumber) {
 try{
-	recordParcelsArray = aa.parcel.getParcelandAttribute(capId, null);
+	var itemCap = capId;
+	if(arguments.length>2) itemCap=arguments[2];
+	recordParcelsArray = aa.parcel.getParcelandAttribute(itemCap, null);
 	if (recordParcelsArray.getSuccess()) {
 		recordParcelsArray = recordParcelsArray.getOutput().toArray();
 	}
@@ -2155,12 +2155,15 @@ try{
 			if (attributes == null) {
 				continue;
 			}
+			logDebug('here: ' + attributes.size());
 			var changed = false;
 			//Update Attributes:
 			for (var k = 0; k < attributes.size(); k++) {
 				var attributeModel = attributes.get(k);
 				var attrName = attributeModel.getB1AttributeName();
+				logDebug("attrName:  " + attrName);
 				for (atr in attributesMap) {
+					logDebug("atr: + " + atr);
 					if (attrName.equalsIgnoreCase(atr)) {
 						attributeModel.setB1AttributeValue(attributesMap[atr]);
 						changed = true;
@@ -2168,18 +2171,35 @@ try{
 					}//if match
 				}//for all in ValuesMap
 			}//for all attributes in scriptParcelModel
+			logDebug("changed: " + changed);
 			if (changed) {
 				//Update Parcel:
 				var capParcelModel = aa.parcel.getCapParcelModel().getOutput();
-				capParcelModel.setCapIDModel(capId);
+				capParcelModel.setCapIDModel(itemCap);
 				capParcelModel.setParcelNo(parcelNo);
 				capParcelModel.setParcelModel(parcelScriptModel);
 				var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
-			}//changed
+			}else{//changed
+				arrThisRecd = aa.parcel.getParcelandAttribute(capId, null);
+				if (arrThisRecd.getSuccess()) {
+					arrThisRecd = arrThisRecd.getOutput().toArray();
+					var tParcelScriptModel = arrThisRecd[p];
+					var tParcelNo = tParcelScriptModel.getParcelNumber();
+					//find parcel to update
+					var tAttributes = tParcelScriptModel.getParcelAttribute();
+					parcelScriptModel.setParcelAttribute(tAttributes);
+					var capParcelModel = aa.parcel.getCapParcelModel().getOutput();
+					capParcelModel.setCapIDModel(itemCap);
+					capParcelModel.setParcelNo(parcelNo);
+					capParcelModel.setParcelModel(parcelScriptModel);
+					var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
+					logDebug("updateResult: " + updateResult.getSuccess());
+				}
+			}
 		}//for all parcels attached to record
 		return true;
 	} else {
-		logDebug("**INFO No parcels found for cap " + capId);
+		logDebug("**INFO No parcels found for cap " + itemCap);
 		return false;
 	}
 	return false;
