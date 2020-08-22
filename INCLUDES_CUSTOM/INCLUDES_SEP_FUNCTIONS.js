@@ -2193,7 +2193,11 @@ try{
 					capParcelModel.setParcelNo(parcelNo);
 					capParcelModel.setParcelModel(parcelScriptModel);
 					var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
-					logDebug("updateResult: " + updateResult.getSuccess());
+					if(updateResult.getSuccess()){
+						logDebug("Parcel Attributes updated successfully");
+					}else{
+						logDebug("Error updating parcel attributes: " + updateResult.getErrorMessage());
+					}
 				}
 			}
 		}//for all parcels attached to record
