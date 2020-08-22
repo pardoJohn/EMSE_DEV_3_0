@@ -1311,6 +1311,25 @@ try{
 												if(""+sepRules[row]["Copy Address/Parcel/Owner"]=="Yes"){
 													copyAddresses(capId, parCapId);
 													copyParcels(capId, parCapId);
+													arrThisRecd = aa.parcel.getParcelandAttribute(capId, null);
+													if (arrThisRecd.getSuccess()) {
+														arrThisRecd = arrThisRecd.getOutput().toArray();
+														var tParcelScriptModel = arrThisRecd[p];
+														var tParcelNo = tParcelScriptModel.getParcelNumber();
+														//find parcel to update
+														var tAttributes = tParcelScriptModel.getParcelAttribute();
+														parcelScriptModel.setParcelAttribute(tAttributes);
+														var capParcelModel = aa.parcel.getCapParcelModel().getOutput();
+														capParcelModel.setCapIDModel(itemCap);
+														capParcelModel.setParcelNo(parcelNo);
+														capParcelModel.setParcelModel(parcelScriptModel);
+														var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
+														if(updateResult.getSuccess()){
+															logDebug("Parcel Attributes updated successfully");
+														}else{
+															logDebug("Error updating parcel attributes: " + updateResult.getErrorMessage() );
+														}
+													}
 													updateRefParcelToCap(parCapId);
 													copyOwner(capId, parCapId);
 												}
@@ -2117,6 +2136,60 @@ try{
 	logDebug("An error occurred in copyOwner: " + err.message);
 	logDebug(err.stack);
 }}
+
+function updateParcelAttributes(attributesMap, parcelNumber) {
+try{
+	recordParcelsArray = aa.parcel.getParcelandAttribute(capId, null);
+	if (recordParcelsArray.getSuccess()) {
+		recordParcelsArray = recordParcelsArray.getOutput().toArray();
+	}
+	if (recordParcelsArray != null) {
+		for (p in recordParcelsArray) {
+			var parcelScriptModel = recordParcelsArray[p];
+			var parcelNo = parcelScriptModel.getParcelNumber();
+			//find parcel to update
+			if (!parcelNo.equals(parcelNumber)) {
+				continue;
+			}
+			var attributes = parcelScriptModel.getParcelAttribute();
+			if (attributes == null) {
+				continue;
+			}
+			var changed = false;
+			//Update Attributes:
+			for (var k = 0; k < attributes.size(); k++) {
+				var attributeModel = attributes.get(k);
+				var attrName = attributeModel.getB1AttributeName();
+				for (atr in attributesMap) {
+					if (attrName.equalsIgnoreCase(atr)) {
+						attributeModel.setB1AttributeValue(attributesMap[atr]);
+						changed = true;
+						break;
+					}//if match
+				}//for all in ValuesMap
+			}//for all attributes in scriptParcelModel
+			if (changed) {
+				//Update Parcel:
+				var capParcelModel = aa.parcel.getCapParcelModel().getOutput();
+				capParcelModel.setCapIDModel(capId);
+				capParcelModel.setParcelNo(parcelNo);
+				capParcelModel.setParcelModel(parcelScriptModel);
+				var updateResult = aa.parcel.updateDailyParcelWithAPOAttribute(capParcelModel);
+			}//changed
+		}//for all parcels attached to record
+		return true;
+	} else {
+		logDebug("**INFO No parcels found for cap " + capId);
+		return false;
+	}
+	return false;
+}catch (err){
+	logDebug("A JavaScript Error occurred in updateParcelAttributes:  " + err.message);
+	logDebug(err.stack)
+}}
+
+
+
 //end corrected standard functions 
 
 
