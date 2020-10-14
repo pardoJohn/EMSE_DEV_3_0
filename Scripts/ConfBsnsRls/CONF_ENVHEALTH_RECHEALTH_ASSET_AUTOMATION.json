@@ -17,7 +17,7 @@
         },
         "action": {
           "copyContacts": [
-            "Applicant"
+            "Facility Owner"
            
           ],
           "updateExistingRefAsset": true,
