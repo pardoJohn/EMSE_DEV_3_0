@@ -1,0 +1,57 @@
+{
+  "EnvHealth/Food Retail/*/*": {
+    "WorkflowTaskUpdateAfter": [
+      {
+        "metadata": {
+          "description": "Assess Time Accounting Based Fees",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "task": [
+            "Time Entry Review"
+          ],
+          "status": [
+            "Approved"
+          ]
+        },
+        "action": {},
+        "postScript": ""
+      }
+    ],
+    "InspectionResultModifyAfter": [
+      {
+        "metadata": {
+          "description": "Assess Time Accounting Based Fees",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "inspectionResult": [
+            "Completed",
+            "Complete"
+          ]
+        },
+        "action": {},
+        "postScript": ""
+      }
+    ],
+    "InspectionResultSubmitAfter": [
+      {
+        "metadata": {
+          "description": "Assess Time Accounting Based Fees",
+          "operators": {}
+        },
+        "preScript": "",
+        "criteria": {
+          "inspectionResult": [
+            "Completed",
+            "Complete"
+          ]
+        },
+        "action": {},
+        "postScript": ""
+      }
+    ]
+  }
+}
